@@ -2,7 +2,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 
 from algorithms.algorithms import ALGORITHMS_DICTIONARY
-from data.data import number_of_files, DATA_DIRECTORY_PATH, data_from_file
+from data.dataset_collector import number_of_files, DATA_DIRECTORY_PATH, data_from_file
 from visualizer.visualizer import visualize
 
 
