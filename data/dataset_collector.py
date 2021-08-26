@@ -10,10 +10,10 @@ def get_all_csv_files(folder_path):
     files_in_folder = os.listdir(folder_path)
     csv_files = []
     for file_name in files_in_folder:
-        if os.path.isdir(folder_path + "/" + file_name):
-            csv_files.extend(get_all_csv_files(folder_path + "/" + file_name))
+        if os.path.isdir(os.path.join(folder_path, file_name)):
+            csv_files.extend(get_all_csv_files(os.path.join(folder_path, file_name)))
         else:
-            csv_files.extend([folder_path + "/" + file_path for file_path in files_in_folder if file_path.endswith(".csv")])
+            csv_files.extend([os.path.join(folder_path, file_name) for file_path in files_in_folder if file_path.endswith(".csv")])
     return csv_files
 
 
