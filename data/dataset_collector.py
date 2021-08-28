@@ -13,12 +13,14 @@ def get_all_csv_files(folder_path):
         if os.path.isdir(os.path.join(folder_path, file_name)):
             csv_files.extend(get_all_csv_files(os.path.join(folder_path, file_name)))
         else:
-            csv_files.extend([os.path.join(folder_path, file_name) for file_path in files_in_folder if file_path.endswith(".csv")])
+            csv_files.extend(
+                [os.path.join(folder_path, file_name) for file_path in files_in_folder if file_path.endswith(".csv")]
+            )
     return csv_files
 
 
 class DatasetCollector:
-    DATA_DIRECTORY_PATH = "datasets/"
+    DATA_DIRECTORY_PATH = "data/datasets/"
 
     # Returns dictionary with folder name as key and
     # list of csv files path in folder
@@ -29,7 +31,3 @@ class DatasetCollector:
             folder_path = self.DATA_DIRECTORY_PATH + folder_name
             csv_files_dictionary[folder_name] = get_all_csv_files(folder_path)
         return csv_files_dictionary
-
-
-dataset_collector = DatasetCollector()
-print(dataset_collector.get_all_csv_files_in_datasets_folder())
