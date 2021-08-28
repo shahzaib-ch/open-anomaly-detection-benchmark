@@ -1,11 +1,8 @@
 import numpy as np
 import pandas as pd
 
-from helper.LabelsHelper import replace
+from helper.LabelsHelper import update_column_name_for_all_file_in_folder
 
-a = np.array([[1, 0, 1, -1], [1, 0, 1, -1]])
-
-df = pd.DataFrame(a, columns=["one", "two", "three", "four"])
-print([df.columns != "one"])
+update_column_name_for_all_file_in_folder("data/datasets/yahoo/A3Benchmark", "anomaly", "is_anomaly")
 
 

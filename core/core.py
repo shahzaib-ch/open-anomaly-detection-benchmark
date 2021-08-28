@@ -79,4 +79,4 @@ def __save_detector_result(detector_name, detector_result):
     detector_results_from_file.append(detector_result)
     benchmark_result_dictionary[detector_name] = detector_results_from_file
 
-    save_dictionary_to_file(benchmark_result_dictionary)
+    save_dictionary_to_file(benchmark_result_dictionary, result_file_path)
