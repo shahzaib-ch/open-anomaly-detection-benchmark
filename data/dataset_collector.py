@@ -13,9 +13,10 @@ def get_all_csv_files(folder_path):
         if os.path.isdir(os.path.join(folder_path, file_name)):
             csv_files.extend(get_all_csv_files(os.path.join(folder_path, file_name)))
         else:
-            csv_files.extend(
-                [os.path.join(folder_path, file_name) for file_path in files_in_folder if file_path.endswith(".csv")]
-            )
+            pass
+    csv_files.extend(
+        [os.path.join(folder_path, file_path) for file_path in files_in_folder if file_path.endswith(".csv")]
+    )
     return csv_files
 
 
