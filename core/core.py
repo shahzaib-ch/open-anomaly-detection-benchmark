@@ -7,6 +7,8 @@ from preprocessor.preprocessor import PreProcessor
 
 
 def do_benchmarking():
+    __clearing_data_from_last_run()
+
     dataset_collector = DatasetCollector()
     datasets = dataset_collector.get_all_csv_files_in_datasets_folder()
     print("Got these datasets: " + str(datasets.keys()))
@@ -18,7 +20,7 @@ def do_benchmarking():
         for dataset_name, files_path_array in datasets.items():
 
             for dataset_file_path in files_path_array:
-                print("Evaluating detector: " + detector_name + "on file " + dataset_file_path + "....")
+                print("Evaluating detector: " + detector_name + " on file " + dataset_file_path + "....")
 
                 input_instances_train, input_instances_test, labels_train, labels_test = \
                     __pre_process_data_set(dataset_file_path)
@@ -73,10 +75,14 @@ def __save_detector_result(detector_name, detector_result):
     if os.path.isfile(result_file_path):
         benchmark_result_dictionary = read_dictionary_from_file(result_file_path)
 
-    if detector_name in benchmark_result_dictionary.items():
+    if detector_name in benchmark_result_dictionary.keys():
         detector_results_from_file = benchmark_result_dictionary.get(detector_name)
 
     detector_results_from_file.append(detector_result)
     benchmark_result_dictionary[detector_name] = detector_results_from_file
 
     save_dictionary_to_file(benchmark_result_dictionary, result_file_path)
+
+
+def __clearing_data_from_last_run():
+    os.remove("result/benchmark_result")

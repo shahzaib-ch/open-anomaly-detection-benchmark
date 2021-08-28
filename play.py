@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
 
-from helper.LabelsHelper import update_column_name_for_all_file_in_folder
+from helper.LabelsHelper import update_column_name_for_all_file_in_folder, unpickle_result
 
-update_column_name_for_all_file_in_folder("data/datasets/yahoo/A4Benchmark", "anomaly", "is_anomaly")
+unpickle_result()
 
 

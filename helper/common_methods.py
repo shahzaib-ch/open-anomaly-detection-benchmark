@@ -1,18 +1,17 @@
-import ast
+import pickle
 
 
 def read_dictionary_from_file(file_path):
     """
     Returns dictionary after reading from file
     """
-    with open(file_path, 'r') as f:
-        s = f.read()
-        return ast.literal_eval(s)
+    with open(file_path, 'rb') as f:
+        return pickle.load(f)
 
 
 def save_dictionary_to_file(dictionary, file_path):
     """
     Saves dictionary to file
     """
-    with open(file_path, 'w') as f:
-        f.write(str(dictionary))
+    with open(file_path, 'wb') as f:
+        pickle.dump(dictionary, f, protocol=pickle.HIGHEST_PROTOCOL)
