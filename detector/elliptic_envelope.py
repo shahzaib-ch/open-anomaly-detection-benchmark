@@ -3,7 +3,7 @@ from abc import ABC
 from sklearn.covariance import EllipticEnvelope
 
 from detector.base_detector import BaseDetector
-from helper.LabelsHelper import replace
+from helper.LabelsHelper import replace_in_array
 
 
 class EllipticEnvelopeDetector(BaseDetector, ABC):
@@ -15,6 +15,6 @@ class EllipticEnvelopeDetector(BaseDetector, ABC):
 
     def predict(self, input_instances):
         labels = self.model.predict(input_instances)
-        labels = replace(labels, 1, 0)
-        labels = replace(labels, -1, 1)
+        labels = replace_in_array(labels, 1, 0)
+        labels = replace_in_array(labels, -1, 1)
         return labels
