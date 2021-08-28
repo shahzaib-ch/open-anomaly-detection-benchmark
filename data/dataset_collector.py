@@ -30,13 +30,6 @@ class DatasetCollector:
             csv_files_dictionary[folder_name] = get_all_csv_files(folder_path)
         return csv_files_dictionary
 
-    """def data_from_file(self, path):
-    df = pd.read_csv(path)
-    X = df.iloc[:, 1:2].to_numpy()
-    y = df.iloc[:, 2:3].to_numpy()
-    y = y.reshape(y.size)
-    return X, y"""
-
 
 dataset_collector = DatasetCollector()
 print(dataset_collector.get_all_csv_files_in_datasets_folder())
