@@ -30,5 +30,6 @@ class DatasetCollector:
         csv_files_dictionary = {}
         for folder_name in datasets_folder_list:
             folder_path = self.DATA_DIRECTORY_PATH + folder_name
-            csv_files_dictionary[folder_name] = get_all_csv_files(folder_path)
+            if os.path.isdir(folder_path):
+                csv_files_dictionary[folder_name] = get_all_csv_files(folder_path)
         return csv_files_dictionary
