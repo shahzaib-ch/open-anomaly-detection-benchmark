@@ -31,9 +31,3 @@ class BaseDetector(ABC):
         :param input_instances: test data
         """
         pass
-
-
-ALGORITHMS_DICTIONARY = {
-    "Kmeans": KMeans(n_clusters=2, random_state=20),
-    "Elliptic Envelope": EllipticEnvelope(random_state=10)
-}

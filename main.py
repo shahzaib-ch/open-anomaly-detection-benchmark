@@ -1,4 +1,4 @@
-from core.core import run
+from core.core import do_benchmarking
 
 if __name__ == '__main__':
-    run()
+    do_benchmarking()
