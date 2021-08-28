@@ -14,7 +14,7 @@ class PreProcessor:
         """
         df = pd.read_csv(self.file_path)
         labels = df["is_anomaly"]
-        input_instances = df[[df.columns != "is_anomaly"]]
+        input_instances = df.loc[:, df.columns != "is_anomaly"]
         return train_test_split(input_instances, labels, train_size=0.5, shuffle=False)
 
     def get_input_instances_and_labels_split(self):
