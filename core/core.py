@@ -1,5 +1,7 @@
 import os
 
+import numpy as np
+
 from data.dataset_collector import DatasetCollector
 from detector.detector_aggregator import ALGORITHMS_DICTIONARY
 from helper.common_methods import read_dictionary_from_file, save_dictionary_to_file
@@ -26,7 +28,9 @@ def do_benchmarking():
                     __pre_process_data_set(dataset_file_path)
                 detected_labels = __run_detector_on_data(detector_instance, input_instances_train, input_instances_test,
                                                          labels_train)
-                detector_result = __create_result_json(detector_name, dataset_name, dataset_file_path, detected_labels)
+                complete_detected_labels = np.concatenate((labels_train, detected_labels))
+                detector_result = __create_result_json(detector_name, dataset_name, dataset_file_path,
+                                                       complete_detected_labels)
                 __save_detector_result(detector_name, detector_result)
 
 
@@ -53,12 +57,12 @@ def __run_detector_on_data(detector_instance, input_instances_train, input_insta
     return detector_instance.predict(input_instances_test)
 
 
-def __create_result_json(detector_name, dataset_name, dataset_file_path, detected_labels):
+def __create_result_json(detector_name, dataset_name, dataset_file_path, complete_detected_labels):
     return {
         dataset_file_path: [
             dataset_name,
             detector_name,
-            detected_labels
+            complete_detected_labels
         ]
     }
 
@@ -85,4 +89,5 @@ def __save_detector_result(detector_name, detector_result):
 
 
 def __clearing_data_from_last_run():
-    os.remove("result/benchmark_result")
+    if os.path.isfile("result/benchmark_result"):
+        os.remove("result/benchmark_result")

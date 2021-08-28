@@ -1,8 +1,3 @@
-import numpy as np
-import pandas as pd
+from visualizer.visualizing_tools import get_result_data_and_show
 
-from helper.LabelsHelper import update_column_name_for_all_file_in_folder, unpickle_result
-
-unpickle_result()
-
-
+get_result_data_and_show()
