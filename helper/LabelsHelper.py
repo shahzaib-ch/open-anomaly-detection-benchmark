@@ -37,6 +37,14 @@ def update_column_name_in_csv_file(file_path, old_column_name, new_column_name):
     print("Updated: " + file_path)
 
 
+def remove_first_column_in_csv_file(file_path):
+    df = pd.read_csv(file_path)
+    df = df.iloc[:, 1:]
+    df.set_index("timestamps")
+    df.to_csv(file_path, index=False)
+    print("Updated: " + file_path)
+
+
 def unpickle_result():
     """
     Converts results file to json in readable form
@@ -48,6 +56,7 @@ def unpickle_result():
 
 class NumpyEncoder(json.JSONEncoder):
     """ Special json encoder for numpy types """
+
     def default(self, obj):
         if isinstance(obj, np.integer):
             return int(obj)

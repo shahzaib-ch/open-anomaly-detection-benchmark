@@ -48,5 +48,5 @@ def visualize(input_instances_train, input_instances_test, labels_train, labels_
 
     print("Data file: ", file_name)
     print("Algorithm Name: ", algo_name)
-    print("Acurracy: ", accuracy_score(labels_test, labels_detected))
-    print("Matrix = tn, fp, fn, tp: ", confusion_matrix(labels_test, labels_detected).ravel())
+    print("Acurracy: ", accuracy_score(labels, labels_detected))
+    print("Matrix = tn, fp, fn, tp: ", confusion_matrix(labels, labels_detected).ravel())
