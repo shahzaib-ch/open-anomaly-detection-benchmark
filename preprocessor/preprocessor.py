@@ -13,6 +13,8 @@ class PreProcessor:
         input_instances_train, input_instances_test, labels_train, labels_test
         """
         df = pd.read_csv(self.file_path)
+        # cleaning unnecessary columns
+        # df.pop("timestamps")
         labels = df["is_anomaly"]
         input_instances = df.loc[:, df.columns != "is_anomaly"]
         return train_test_split(input_instances, labels, train_size=0.5, shuffle=False)
