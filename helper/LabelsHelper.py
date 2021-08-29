@@ -33,7 +33,7 @@ def update_column_name_for_all_file_in_folder(folder_path, old_column_name, new_
 def update_column_name_in_csv_file(file_path, old_column_name, new_column_name):
     df = pd.read_csv(file_path)
     df.rename(columns={old_column_name: new_column_name}, inplace=True)
-    df.to_csv(file_path)
+    df.to_csv(file_path, index=False)
     print("Updated: " + file_path)
 
 
