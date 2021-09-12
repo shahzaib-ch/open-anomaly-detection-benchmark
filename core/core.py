@@ -30,7 +30,8 @@ def do_benchmarking():
                                                          labels_train)
                 complete_detected_labels = np.concatenate((labels_train, detected_labels))
                 detector_result = __create_result_json(detector_name, dataset_name, dataset_file_path,
-                                                       complete_detected_labels)
+                                                       input_instances_train, input_instances_test, labels_train,
+                                                       labels_test, complete_detected_labels)
                 __save_detector_result(detector_name, detector_result)
 
 
@@ -57,13 +58,21 @@ def __run_detector_on_data(detector_instance, input_instances_train, input_insta
     return detector_instance.predict(input_instances_test)
 
 
-def __create_result_json(detector_name, dataset_name, dataset_file_path, complete_detected_labels):
+def __create_result_json(detector_name, dataset_name, dataset_file_path,
+                         input_instances_train, input_instances_test, labels_train, labels_test,
+                         complete_detected_labels):
     return {
-        dataset_file_path: [
-            dataset_name,
-            detector_name,
-            complete_detected_labels
-        ]
+        dataset_file_path: {
+            "dataset_name": dataset_name,
+            "detector_name": detector_name,
+            "data": {
+                "input_instances_train": input_instances_train,
+                "input_instances_test": input_instances_test,
+                "labels_train": labels_train.to_numpy(),
+                "labels_test": labels_test.to_numpy(),
+                "labels_detected": complete_detected_labels
+            }
+        }
     }
 
 
