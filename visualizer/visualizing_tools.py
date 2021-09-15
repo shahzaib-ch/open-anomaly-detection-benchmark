@@ -52,10 +52,9 @@ def get_result_data_as_data_frame():
     return __make_result_data_frame(result_data_array)
 
 
-def __transform_result_data_frame_for_sns_heat_map(result_data_frame):
-    heat_map_data = result_data_frame.loc[:, ("detector_name", "file_path")]
-    heat_map_data["accuracy"] = result_data_frame.apply(lambda row: __calculate_accuracy_score(row), axis=1)
-    return heat_map_data
+def __add_accuracy_to_df(result_data_frame):
+    result_data_frame["accuracy"] = result_data_frame.apply(lambda row: __calculate_accuracy_score(row), axis=1)
+    return result_data_frame
 
 
 """
@@ -92,7 +91,8 @@ def __make_result_data_frame(result_data_array):
 
 def show_full_detailed_result_heat_map():
     result_data_frame = get_result_data_as_data_frame()
-    heat_map_df = __transform_result_data_frame_for_sns_heat_map(result_data_frame)
+    heat_map_df = __add_accuracy_to_df(result_data_frame)
+    heat_map_df = heat_map_df.loc[:, ("detector_name", "file_path", "accuracy")]
     heat_map_df = heat_map_df.pivot(index="file_path", columns="detector_name")
     r = sns.heatmap(heat_map_df, cmap='BuPu')
     r.set_title("Heatmap of algorithm accuracy on Yahoo dataset")
@@ -101,9 +101,10 @@ def show_full_detailed_result_heat_map():
 
 def show_result_overview_heat_map():
     result_data_frame = get_result_data_as_data_frame()
-    heat_map_df = __transform_result_data_frame_for_sns_heat_map(result_data_frame)
-    heat_map_df = heat_map_df.pivot(index="detector_name", columns="file_path")
-    heat_map_df.groupby(['detector_name']).mean()
+    heat_map_df = __add_accuracy_to_df(result_data_frame)
+    heat_map_df = heat_map_df.loc[:, ("detector_name", "dataset_name", "accuracy")]
+    heat_map_df = heat_map_df.groupby(['detector_name', 'dataset_name'], as_index=False).mean()
+    heat_map_df = heat_map_df.pivot(index="detector_name", columns="dataset_name")
     r = sns.heatmap(heat_map_df, cmap='BuPu')
     r.set_title("Heatmap of algorithm accuracy on Yahoo dataset")
     plt.show()
