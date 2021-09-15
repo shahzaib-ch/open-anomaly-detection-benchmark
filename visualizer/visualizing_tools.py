@@ -47,21 +47,21 @@ def get_result_data_as_data_frame():
                                      file_path + " and detector: " + detector_name)
                 """visualize(input_instances_train, input_instances_test, labels_train, labels_test,
                           result_of_file_list[2], file_path, detector_name)"""
-                result_data_frame_row = convert_to_result_data_frame_row(input_instances_train, input_instances_test,
+                result_data_frame_row = __convert_to_result_data_frame_row(input_instances_train, input_instances_test,
                                                                          labels_train, labels_test, labels_detected,
                                                                          file_path, detector_name)
                 result_data_array.append(result_data_frame_row)
-    return make_result_data_frame(result_data_array)
+    return __make_result_data_frame(result_data_array)
 
 
-def show_result():
-    result_data_frame = get_result_data_as_data_frame()
+def __transform_result_data_frame_for_sns_heat_map(result_data_frame):
     heat_map_data = result_data_frame.loc[:, ("detector", "dataset file")]
-    heat_map_data["accuracy"] = result_data_frame.apply(lambda row: calculate_accuracy_score(row), axis=1)
+    heat_map_data["accuracy"] = result_data_frame.apply(lambda row: __calculate_accuracy_score(row), axis=1)
     heat_map_data = heat_map_data.pivot(index="dataset file", columns="detector")
-    show_full_detailed_result_heat_map(heat_map_data)
+    return heat_map_data
 
 
+"""
 def visualize(input_instances_train, input_instances_test, labels_train, labels_test, labels_detected, file_name,
               algo_name):
     labels_test = pd.DataFrame(labels_test).to_numpy().reshape(labels_test.size)
@@ -77,27 +77,31 @@ def visualize(input_instances_train, input_instances_test, labels_train, labels_
     print("Algorithm Name: ", algo_name)
     print("Acurracy: ", accuracy_score(labels, labels_detected))
     print("Matrix = tn, fp, fn, tp: ", confusion_matrix(labels, labels_detected).ravel())
+    
+"""
 
 
-def convert_to_result_data_frame_row(input_instances_train, input_instances_test, labels_train, labels_test,
+def __convert_to_result_data_frame_row(input_instances_train, input_instances_test, labels_train, labels_test,
                                      labels_detected, file_path, detector_name):
     return [detector_name, file_path, input_instances_train, input_instances_test, labels_train, labels_test,
             labels_detected]
 
 
-def make_result_data_frame(result_data_array):
+def __make_result_data_frame(result_data_array):
     return pd.DataFrame(result_data_array, columns=["detector", "dataset file", "training data", "test data",
                                                     "training data labels", "test data labels",
                                                     "detected labels"])
 
 
-def show_full_detailed_result_heat_map(result_data_frame):
-    r = sns.heatmap(result_data_frame, cmap='BuPu')
+def show_full_detailed_result_heat_map():
+    result_data_frame = get_result_data_as_data_frame()
+    heat_map_df = __transform_result_data_frame_for_sns_heat_map(result_data_frame)
+    r = sns.heatmap(heat_map_df, cmap='BuPu')
     r.set_title("Heatmap of algorithm accuracy on Yahoo dataset")
     plt.show()
 
 
-def calculate_accuracy_score(row):
+def __calculate_accuracy_score(row):
     labels = np.concatenate((row["training data labels"], row["test data labels"]))
     labels_detected = row["detected labels"]
     return accuracy_score(labels, labels_detected)
