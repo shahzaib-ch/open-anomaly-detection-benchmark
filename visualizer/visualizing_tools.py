@@ -3,7 +3,6 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from sklearn.metrics import accuracy_score
-from sklearn.metrics import confusion_matrix
 
 from helper.common_methods import read_dictionary_from_file
 
@@ -42,22 +41,20 @@ def get_result_data_as_data_frame():
                 labels_train = data["labels_train"]
                 labels_test = data["labels_test"]
                 labels_detected = data["labels_detected"]
+                dataset_name = result_of_file["dataset_name"]
                 if labels_detected.size != np.concatenate((labels_train, labels_test)).size:
                     raise ValueError("labels of dataset and detected labels are not same for file: " +
                                      file_path + " and detector: " + detector_name)
-                """visualize(input_instances_train, input_instances_test, labels_train, labels_test,
-                          result_of_file_list[2], file_path, detector_name)"""
                 result_data_frame_row = __convert_to_result_data_frame_row(input_instances_train, input_instances_test,
-                                                                         labels_train, labels_test, labels_detected,
-                                                                         file_path, detector_name)
+                                                                           labels_train, labels_test, labels_detected,
+                                                                           file_path, detector_name, dataset_name)
                 result_data_array.append(result_data_frame_row)
     return __make_result_data_frame(result_data_array)
 
 
 def __transform_result_data_frame_for_sns_heat_map(result_data_frame):
-    heat_map_data = result_data_frame.loc[:, ("detector", "dataset file")]
+    heat_map_data = result_data_frame.loc[:, ("detector_name", "file_path")]
     heat_map_data["accuracy"] = result_data_frame.apply(lambda row: __calculate_accuracy_score(row), axis=1)
-    heat_map_data = heat_map_data.pivot(index="dataset file", columns="detector")
     return heat_map_data
 
 
@@ -82,26 +79,37 @@ def visualize(input_instances_train, input_instances_test, labels_train, labels_
 
 
 def __convert_to_result_data_frame_row(input_instances_train, input_instances_test, labels_train, labels_test,
-                                     labels_detected, file_path, detector_name):
-    return [detector_name, file_path, input_instances_train, input_instances_test, labels_train, labels_test,
-            labels_detected]
+                                       labels_detected, file_path, detector_name, dataset_name):
+    return [detector_name, dataset_name, file_path, input_instances_train, input_instances_test,
+            labels_train, labels_test, labels_detected]
 
 
 def __make_result_data_frame(result_data_array):
-    return pd.DataFrame(result_data_array, columns=["detector", "dataset file", "training data", "test data",
-                                                    "training data labels", "test data labels",
-                                                    "detected labels"])
+    return pd.DataFrame(result_data_array, columns=["detector_name", "dataset_name", "file_path",
+                                                    "input_instances_train", "input_instances_test", "labels_train",
+                                                    "labels_test", "labels_detected"])
 
 
 def show_full_detailed_result_heat_map():
     result_data_frame = get_result_data_as_data_frame()
     heat_map_df = __transform_result_data_frame_for_sns_heat_map(result_data_frame)
+    heat_map_df = heat_map_df.pivot(index="file_path", columns="detector_name")
+    r = sns.heatmap(heat_map_df, cmap='BuPu')
+    r.set_title("Heatmap of algorithm accuracy on Yahoo dataset")
+    plt.show()
+
+
+def show_result_overview_heat_map():
+    result_data_frame = get_result_data_as_data_frame()
+    heat_map_df = __transform_result_data_frame_for_sns_heat_map(result_data_frame)
+    heat_map_df = heat_map_df.pivot(index="detector_name", columns="file_path")
+    heat_map_df.groupby(['detector_name']).mean()
     r = sns.heatmap(heat_map_df, cmap='BuPu')
     r.set_title("Heatmap of algorithm accuracy on Yahoo dataset")
     plt.show()
 
 
 def __calculate_accuracy_score(row):
-    labels = np.concatenate((row["training data labels"], row["test data labels"]))
-    labels_detected = row["detected labels"]
+    labels = np.concatenate((row["labels_train"], row["labels_test"]))
+    labels_detected = row["labels_detected"]
     return accuracy_score(labels, labels_detected)
