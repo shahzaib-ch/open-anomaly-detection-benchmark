@@ -1,4 +1,4 @@
-timestamp,value,label
+timestamp,value,is_anomaly
 2015-02-26 21:42:53,35,0
 2015-02-26 21:47:53,41,0
 2015-02-26 21:52:53,32,0
