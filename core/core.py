@@ -24,6 +24,10 @@ def do_benchmarking():
             for dataset_file_path in files_path_array:
                 print("Evaluating detector: " + detector_name + " on file " + dataset_file_path + "....")
 
+                if dataset_file_path in detector_instance.notSupportedDatasets():
+                    print("Detector: " + detector_name + " is not suitable for " + dataset_file_path + "....")
+                    continue
+                    
                 input_instances_train, input_instances_test, labels_train, labels_test = \
                     __pre_process_data_set(dataset_file_path)
                 detected_labels = __run_detector_on_data(detector_instance, input_instances_train, input_instances_test,

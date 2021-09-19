@@ -114,3 +114,5 @@ def __calculate_accuracy_score(row):
     labels = np.concatenate((row["labels_train"], row["labels_test"]))
     labels_detected = row["labels_detected"]
     return accuracy_score(labels, labels_detected)
+
+# Todo should add FP, TP, FN, FP visualization as well.
