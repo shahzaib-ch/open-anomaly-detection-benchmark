@@ -1,0 +1,3 @@
+from visualizer.visualizing_tools import show_full_detailed_result_heat_map
+
+show_full_detailed_result_heat_map()
