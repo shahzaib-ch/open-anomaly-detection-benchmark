@@ -5,6 +5,7 @@ import seaborn as sns
 from sklearn.metrics import accuracy_score
 
 from helper.common_methods import read_dictionary_from_file
+from visualizer.result_data_keys import ResultDataKey
 
 """
 Result format is:
@@ -12,14 +13,14 @@ Result format is:
     detector name: {
         [
              dataset_file_path: {
-                "dataset_name": dataset_name,
-                "detector_name": detector_name,
+                ResultDataKey.dataset_name: dataset_name,
+                ResultDataKey.detector_name: detector_name,
                 "data": {
                     "input_instances_train": input_instances_train,
                     "input_instances_test": input_instances_test,
-                    "labels_train": labels_train,
-                    "labels_test": labels_test,
-                    "labels_detected": complete_detected_labels
+                    ResultDataKey.labels_train: labels_train,
+                    ResultDataKey.labels_test: labels_test,
+                    ResultDataKey.labels_detected: complete_detected_labels
                 }
             },
             ...
@@ -30,18 +31,21 @@ Result format is:
 
 
 def get_result_data_as_data_frame():
+    """
+    Reads data from result file and converts it to data frame
+    """
     result_data_array = []
     dictionary = read_dictionary_from_file("result/benchmark_result")
     for detector_name, file_results in dictionary.items():
         for file_result in file_results:
             for file_path, result_of_file in file_result.items():
-                data = result_of_file["data"]
-                input_instances_train = data["input_instances_train"]
-                input_instances_test = data["input_instances_test"]
-                labels_train = data["labels_train"]
-                labels_test = data["labels_test"]
-                labels_detected = data["labels_detected"]
-                dataset_name = result_of_file["dataset_name"]
+                data = result_of_file[ResultDataKey.data]
+                input_instances_train = data[ResultDataKey.input_instances_train]
+                input_instances_test = data[ResultDataKey.input_instances_test]
+                labels_train = data[ResultDataKey.labels_train]
+                labels_test = data[ResultDataKey.labels_test]
+                labels_detected = data[ResultDataKey.labels_detected]
+                dataset_name = result_of_file[ResultDataKey.dataset_name]
                 if labels_detected.size != np.concatenate((labels_train, labels_test)).size:
                     raise ValueError("labels of dataset and detected labels are not same for file: " +
                                      file_path + " and detector: " + detector_name)
@@ -53,7 +57,11 @@ def get_result_data_as_data_frame():
 
 
 def __add_accuracy_to_df(result_data_frame):
-    result_data_frame["accuracy"] = result_data_frame.apply(lambda row: __calculate_accuracy_score(row), axis=1)
+    """
+    Adds accuracy column in data frame of results
+    """
+    result_data_frame[ResultDataKey.accuracy] = result_data_frame.apply(lambda row: __calculate_accuracy_score(row),
+                                                                        axis=1)
     return result_data_frame
 
 
@@ -84,16 +92,17 @@ def __convert_to_result_data_frame_row(input_instances_train, input_instances_te
 
 
 def __make_result_data_frame(result_data_array):
-    return pd.DataFrame(result_data_array, columns=["detector_name", "dataset_name", "file_path",
-                                                    "input_instances_train", "input_instances_test", "labels_train",
-                                                    "labels_test", "labels_detected"])
+    return pd.DataFrame(result_data_array, columns=[ResultDataKey.detector_name, ResultDataKey.dataset_name,
+                                                    ResultDataKey.file_path, ResultDataKey.input_instances_train,
+                                                    ResultDataKey.input_instances_test, ResultDataKey.labels_train,
+                                                    ResultDataKey.labels_test, ResultDataKey.labels_detected])
 
 
 def show_full_detailed_result_heat_map():
     result_data_frame = get_result_data_as_data_frame()
     heat_map_df = __add_accuracy_to_df(result_data_frame)
-    heat_map_df = heat_map_df.loc[:, ("detector_name", "file_path", "accuracy")]
-    heat_map_df = heat_map_df.pivot(index="file_path", columns="detector_name")
+    heat_map_df = heat_map_df.loc[:, (ResultDataKey.detector_name, ResultDataKey.file_path, ResultDataKey.accuracy)]
+    heat_map_df = heat_map_df.pivot(index=ResultDataKey.file_path, columns=ResultDataKey.detector_name)
     r = sns.heatmap(heat_map_df, cmap='BuPu')
     r.set_title("Heatmap of algorithm accuracy on Yahoo dataset")
     plt.show()
@@ -102,17 +111,17 @@ def show_full_detailed_result_heat_map():
 def show_result_overview_heat_map():
     result_data_frame = get_result_data_as_data_frame()
     heat_map_df = __add_accuracy_to_df(result_data_frame)
-    heat_map_df = heat_map_df.loc[:, ("detector_name", "dataset_name", "accuracy")]
-    heat_map_df = heat_map_df.groupby(['detector_name', 'dataset_name'], as_index=False).mean()
-    heat_map_df = heat_map_df.pivot(index="detector_name", columns="dataset_name")
+    heat_map_df = heat_map_df.loc[:, (ResultDataKey.detector_name, ResultDataKey.dataset_name, ResultDataKey.accuracy)]
+    heat_map_df = heat_map_df.groupby([ResultDataKey.detector_name, ResultDataKey.dataset_name], as_index=False).mean()
+    heat_map_df = heat_map_df.pivot(index=ResultDataKey.detector_name, columns=ResultDataKey.dataset_name)
     r = sns.heatmap(heat_map_df, cmap='BuPu')
     r.set_title("Heatmap of algorithm accuracy on Yahoo dataset")
     plt.show()
 
 
 def __calculate_accuracy_score(row):
-    labels = np.concatenate((row["labels_train"], row["labels_test"]))
-    labels_detected = row["labels_detected"]
+    labels = np.concatenate((row[ResultDataKey.labels_train], row[ResultDataKey.labels_test]))
+    labels_detected = row[ResultDataKey.labels_detected]
     return accuracy_score(labels, labels_detected)
 
 # Todo should add FP, TP, FN, FP visualization as well.
