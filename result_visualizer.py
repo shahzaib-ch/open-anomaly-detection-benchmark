@@ -1,3 +1,3 @@
-from visualizer.result_collector import show_result_overview_heat_map
+from visualizer.result_visualizer import show_result_overview_heat_map
 
 show_result_overview_heat_map()

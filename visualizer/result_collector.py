@@ -1,11 +1,9 @@
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import seaborn as sns
-from sklearn.metrics import accuracy_score
 
 from helper.common_methods import read_dictionary_from_file
 from visualizer.result_data_keys import ResultDataKey
+from visualizer.result_metric_calculators import calculate_accuracy_score
 
 """
 Result format is:
@@ -56,15 +54,6 @@ def get_result_data_as_data_frame():
     return __make_result_data_frame(result_data_array)
 
 
-def __add_accuracy_to_df(result_data_frame):
-    """
-    Adds accuracy column in data frame of results
-    """
-    result_data_frame[ResultDataKey.accuracy] = result_data_frame.apply(lambda row: __calculate_accuracy_score(row),
-                                                                        axis=1)
-    return result_data_frame
-
-
 """
 def visualize(input_instances_train, input_instances_test, labels_train, labels_test, labels_detected, file_name,
               algo_name):
@@ -96,32 +85,5 @@ def __make_result_data_frame(result_data_array):
                                                     ResultDataKey.file_path, ResultDataKey.input_instances_train,
                                                     ResultDataKey.input_instances_test, ResultDataKey.labels_train,
                                                     ResultDataKey.labels_test, ResultDataKey.labels_detected])
-
-
-def show_full_detailed_result_heat_map():
-    result_data_frame = get_result_data_as_data_frame()
-    heat_map_df = __add_accuracy_to_df(result_data_frame)
-    heat_map_df = heat_map_df.loc[:, (ResultDataKey.detector_name, ResultDataKey.file_path, ResultDataKey.accuracy)]
-    heat_map_df = heat_map_df.pivot(index=ResultDataKey.file_path, columns=ResultDataKey.detector_name)
-    r = sns.heatmap(heat_map_df, cmap='BuPu')
-    r.set_title("Heatmap of algorithm accuracy on Yahoo dataset")
-    plt.show()
-
-
-def show_result_overview_heat_map():
-    result_data_frame = get_result_data_as_data_frame()
-    heat_map_df = __add_accuracy_to_df(result_data_frame)
-    heat_map_df = heat_map_df.loc[:, (ResultDataKey.detector_name, ResultDataKey.dataset_name, ResultDataKey.accuracy)]
-    heat_map_df = heat_map_df.groupby([ResultDataKey.detector_name, ResultDataKey.dataset_name], as_index=False).mean()
-    heat_map_df = heat_map_df.pivot(index=ResultDataKey.detector_name, columns=ResultDataKey.dataset_name)
-    r = sns.heatmap(heat_map_df, cmap='BuPu')
-    r.set_title("Heatmap of algorithm accuracy on Yahoo dataset")
-    plt.show()
-
-
-def __calculate_accuracy_score(row):
-    labels = np.concatenate((row[ResultDataKey.labels_train], row[ResultDataKey.labels_test]))
-    labels_detected = row[ResultDataKey.labels_detected]
-    return accuracy_score(labels, labels_detected)
 
 # Todo should add FP, TP, FN, FP visualization as well.
