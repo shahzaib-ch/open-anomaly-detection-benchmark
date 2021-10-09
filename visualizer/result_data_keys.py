@@ -1,0 +1,11 @@
+class ResultDataKey:
+    data = "data"
+    input_instances_train = "input_instances_train"
+    input_instances_test = "input_instances_test"
+    labels_train = "labels_train"
+    labels_test = "labels_test"
+    labels_detected = "labels_detected"
+    dataset_name = "dataset_name"
+    detector_name = "detector_name"
+    file_path = "file_path"
+    accuracy = "accuracy"
