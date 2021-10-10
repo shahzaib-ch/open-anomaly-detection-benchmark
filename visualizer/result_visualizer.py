@@ -1,3 +1,4 @@
+import numpy as np
 import seaborn as sns
 from matplotlib import pyplot as plt
 from matplotlib.image import AxesImage
@@ -41,24 +42,24 @@ class ResultVisualizer:
             if isinstance(event.artist, Text):
                 detector_name = event.artist.get_text()
                 print("Selected detector: ", detector_name)
-                self.show_result_of_detector(detector_name)
+                self.__show_result_of_detector(detector_name)
 
             if isinstance(event.artist, AxesImage):
                 dataset_index, detector_index = round_xy_coordinates(event.mouseevent.xdata, event.mouseevent.ydata)
                 detector_name = heat_map_df.index.array[detector_index]
                 dataset_name = heat_map_df.columns[dataset_index][1]
                 print("Selected detector: ", detector_name, "---", "Selected dataset: ", dataset_name)
-                self.show_result_of_detector_against_dataset_sub_folders(detector_name, dataset_name)
+                self.__show_result_of_detector_against_dataset_sub_folders(detector_name, dataset_name)
 
         ax.figure.canvas.mpl_connect("pick_event", on_pick)
         ax.set_title("Heatmap of each detector accuracy for each data repository")
         plt.show()
 
-    def show_result_of_detector(self, detector_name):
+    def __show_result_of_detector(self, detector_name):
         # to be implemented
         print(detector_name)
 
-    def show_result_of_detector_against_dataset_sub_folders(self, detector_name, dataset_name):
+    def __show_result_of_detector_against_dataset_sub_folders(self, detector_name, dataset_name):
         result_data_frame = self.result_data_frame
         bar_df = result_data_frame[
             (result_data_frame.detector_name == detector_name) & (result_data_frame.dataset_name == dataset_name)]
@@ -77,7 +78,7 @@ class ResultVisualizer:
                 folder_index, _ = round_xy_coordinates(event.mouseevent.xdata, event.mouseevent.ydata)
                 subfolder = subfolders[folder_index]
                 print("Selected subfolder: ", subfolder)
-                self.show_result_of_detector_against_dataset_single_sub_folder(detector_name, dataset_name, subfolder)
+                self.__show_result_of_detector_against_dataset_single_sub_folder(detector_name, dataset_name, subfolder)
 
         figure.canvas.mpl_connect("pick_event", on_pick)
         ax = figure.axes[0]
@@ -88,7 +89,7 @@ class ResultVisualizer:
         plt.xticks(rotation=45)
         plt.show()
 
-    def show_result_of_detector_against_dataset_single_sub_folder(self, detector_name, dataset_name, subfolder):
+    def __show_result_of_detector_against_dataset_single_sub_folder(self, detector_name, dataset_name, subfolder):
         result_data_frame = self.result_data_frame
         bar_df = result_data_frame[
             (result_data_frame.detector_name == detector_name) & (
@@ -107,7 +108,8 @@ class ResultVisualizer:
                 file_path_index, _ = round_xy_coordinates(event.mouseevent.xdata, event.mouseevent.ydata)
                 file_path = file_paths[file_path_index]
                 print("Selected dataset file: ", file_path)
-                self.show_result_of_detector_against_single_dataset_file(detector_name, dataset_name, file_path)
+                data = self.__get_result_of_detector_against_single_dataset_file(detector_name, dataset_name, file_path)
+                self.__visualize_single_dataset_file_result(data)
 
         figure.canvas.mpl_connect("pick_event", on_pick)
         ax = figure.axes[0]
@@ -118,13 +120,33 @@ class ResultVisualizer:
         plt.xticks(rotation=90)
         plt.show()
 
-    def show_result_of_detector_against_single_dataset_file(self, detector_name, dataset_name, file_path):
+    def __get_result_of_detector_against_single_dataset_file(self, detector_name, dataset_name, file_path):
         result_data_frame = self.result_data_frame
         dataset_file_df = result_data_frame[
             (result_data_frame.detector_name == detector_name) & (
                     result_data_frame.dataset_name == dataset_name) & (
                     result_data_frame.file_path == file_path)]
-        print(dataset_file_df)
+        return dataset_file_df
+
+    def __visualize_single_dataset_file_result(self, data):
+        file_path = data[ResultDataKey.file_path].values[0]
+        dataset_name = data[ResultDataKey.dataset_name].values[0]
+        detector_name = data[ResultDataKey.detector_name].values[0]
+        accuracy = data[ResultDataKey.accuracy].values[0]
+        input_instances_train = data[ResultDataKey.input_instances_train].values[0]
+        input_instances_test = data[ResultDataKey.input_instances_test].values[0]
+        labels_train = data[ResultDataKey.labels_train].values[0]
+        labels_test = data[ResultDataKey.labels_test].values[0]
+        labels_detected = data[ResultDataKey.labels_detected].values[0]
+        subfolder = data[ResultDataKey.subfolder].values[0]
+        input_instances = np.concatenate((input_instances_train, input_instances_test))
+        labels = np.concatenate((labels_train, labels_test))
+
+        figure = plt.figure(len(plt.get_fignums()) + 1)
+        plt.plot(labels)
+        plt.plot(labels_detected)
+        plt.show()
+
 
     """
     def show_result_of_detector_against_dataset(self, detector_name, dataset_name):
