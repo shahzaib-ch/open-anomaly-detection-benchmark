@@ -23,8 +23,9 @@ def add_subfolder_name_to_df(result_data_frame):
     """
     Adds subfolder column in data frame of results
     """
-    result_data_frame[ResultDataKey.subfolder] = result_data_frame.apply(lambda row: __get_subfolder_name_from_path(row),
-                                                                         axis=1)
+    result_data_frame[ResultDataKey.subfolder] = result_data_frame.apply(
+        lambda row: __get_subfolder_name_from_path(row),
+        axis=1)
     return result_data_frame
 
 
