@@ -23,7 +23,7 @@ class ResultVisualizer:
                       (ResultDataKey.detector_name, ResultDataKey.file_path, ResultDataKey.accuracy)]
         heat_map_df = heat_map_df.pivot(index=ResultDataKey.file_path, columns=ResultDataKey.detector_name)
         ax = sns.heatmap(heat_map_df, cmap='BuPu')
-        ax.set_title("Heatmap of algorithm accuracy on Yahoo dataset")
+        ax.set_title("Heatmap of each detector accuracy for each dataset")
         plt.show()
 
     def show_result_overview_heat_map(self):
@@ -32,7 +32,8 @@ class ResultVisualizer:
         heat_map_df = heat_map_df.groupby([ResultDataKey.detector_name, ResultDataKey.dataset_name],
                                           as_index=False).mean()
         heat_map_df = heat_map_df.pivot(index=ResultDataKey.detector_name, columns=ResultDataKey.dataset_name)
-        im, cbar, ax = heatmap(heat_map_df, heat_map_df.index, heat_map_df.columns, picker=True)
+        im, cbar, ax = heatmap(heat_map_df, heat_map_df.index, heat_map_df.columns, cmap='BuPu', cbarlabel="Accuracy",
+                               picker=True)
         annotate_heatmap(im)
 
         def on_pick(event):
@@ -50,6 +51,7 @@ class ResultVisualizer:
                 self.show_result_of_detector_against_dataset_sub_folders(detector_name, dataset_name)
 
         ax.figure.canvas.mpl_connect("pick_event", on_pick)
+        ax.set_title("Heatmap of each detector accuracy for each data repository")
         plt.show()
 
     def show_result_of_detector(self, detector_name):
@@ -78,6 +80,12 @@ class ResultVisualizer:
                 self.show_result_of_detector_against_dataset_single_sub_folder(detector_name, dataset_name, subfolder)
 
         figure.canvas.mpl_connect("pick_event", on_pick)
+        ax = figure.axes[0]
+        title = "Accuracy of " + detector_name + " on " + dataset_name + " data repository subfolders"
+        ax.set_title(title)
+        ax.set_ylabel("Accuracy")
+        ax.set_xlabel("Dataset repository subfolders")
+        plt.xticks(rotation=45)
         plt.show()
 
     def show_result_of_detector_against_dataset_single_sub_folder(self, detector_name, dataset_name, subfolder):
@@ -90,8 +98,14 @@ class ResultVisualizer:
 
         file_paths = bar_df[ResultDataKey.file_path].to_numpy()
         accuracy = bar_df[ResultDataKey.accuracy].to_numpy()
-        plt.figure(len(plt.get_fignums()) + 1)
+        figure = plt.figure(len(plt.get_fignums()) + 1)
         plt.bar(file_paths, accuracy)
+        ax = figure.axes[0]
+        title = "Accuracy of " + detector_name + " on " + dataset_name + "  data repository subfolder " + subfolder
+        ax.set_title(title)
+        ax.set_ylabel("Accuracy")
+        ax.set_xlabel("Dataset files")
+        plt.xticks(rotation=90)
         plt.show()
 
 
