@@ -99,7 +99,17 @@ class ResultVisualizer:
         file_paths = bar_df[ResultDataKey.file_path].to_numpy()
         accuracy = bar_df[ResultDataKey.accuracy].to_numpy()
         figure = plt.figure(len(plt.get_fignums()) + 1)
-        plt.bar(file_paths, accuracy)
+        plt.bar(file_paths, accuracy, picker=True)
+
+        def on_pick(event):
+            # ... process selected item
+            if isinstance(event.artist, Rectangle):
+                file_path_index, _ = round_xy_coordinates(event.mouseevent.xdata, event.mouseevent.ydata)
+                file_path = file_paths[file_path_index]
+                print("Selected dataset file: ", file_path)
+                self.show_result_of_detector_against_single_dataset_file(detector_name, dataset_name, file_path)
+
+        figure.canvas.mpl_connect("pick_event", on_pick)
         ax = figure.axes[0]
         title = "Accuracy of " + detector_name + " on " + dataset_name + "  data repository subfolder " + subfolder
         ax.set_title(title)
@@ -108,14 +118,23 @@ class ResultVisualizer:
         plt.xticks(rotation=90)
         plt.show()
 
+    def show_result_of_detector_against_single_dataset_file(self, detector_name, dataset_name, file_path):
+        result_data_frame = self.result_data_frame
+        dataset_file_df = result_data_frame[
+            (result_data_frame.detector_name == detector_name) & (
+                    result_data_frame.dataset_name == dataset_name) & (
+                    result_data_frame.file_path == file_path)]
+        print(dataset_file_df)
 
-def show_result_of_detector_against_dataset(self, detector_name, dataset_name):
-    heat_map_df = add_accuracy_to_df(self.result_data_frame)
-    heat_map_df = heat_map_df[
-        (heat_map_df.detector_name == detector_name) & (heat_map_df.dataset_name == dataset_name)]
-    heat_map_df = heat_map_df.loc[:, (ResultDataKey.file_path, ResultDataKey.accuracy)]
-    file_paths = heat_map_df[ResultDataKey.file_path].to_numpy()
-    accuracy = heat_map_df[ResultDataKey.accuracy].to_numpy()
-    plt.figure(len(plt.get_fignums()) + 1)
-    plt.bar(file_paths, accuracy)
-    plt.show()
+    """
+    def show_result_of_detector_against_dataset(self, detector_name, dataset_name):
+        heat_map_df = add_accuracy_to_df(self.result_data_frame)
+        heat_map_df = heat_map_df[
+            (heat_map_df.detector_name == detector_name) & (heat_map_df.dataset_name == dataset_name)]
+        heat_map_df = heat_map_df.loc[:, (ResultDataKey.file_path, ResultDataKey.accuracy)]
+        file_paths = heat_map_df[ResultDataKey.file_path].to_numpy()
+        accuracy = heat_map_df[ResultDataKey.accuracy].to_numpy()
+        plt.figure(len(plt.get_fignums()) + 1)
+        plt.bar(file_paths, accuracy)
+        plt.show()
+    """
