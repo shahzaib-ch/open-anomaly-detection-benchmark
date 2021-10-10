@@ -162,12 +162,16 @@ class ResultVisualizer:
         def visualize_dataset_clicked():
             self.visualize_dataset(file_path, input_instances)
 
-        def visualize_dataset_with_anomalies_clicked():
+        def visualize_dataset_labels_clicked():
             self.visualize_dataset_with_anomalies(file_path, detector_name, input_instances, labels, labels_detected)
+
+        def visualize_dataset_with_anomalies():
+            print("hi")
 
         summary_window = DatasetResultSummaryWindow(
             visualize_dataset_clicked,
-            visualize_dataset_with_anomalies_clicked
+            visualize_dataset_labels_clicked,
+            visualize_dataset_with_anomalies
         )
         summary_window.show_window()
 
