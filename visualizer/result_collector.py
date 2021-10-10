@@ -3,7 +3,6 @@ import pandas as pd
 
 from helper.common_methods import read_dictionary_from_file
 from visualizer.result_data_keys import ResultDataKey
-from visualizer.result_metric_calculators import calculate_accuracy_score
 
 """
 Result format is:

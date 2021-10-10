@@ -1,3 +1,4 @@
-from visualizer.result_visualizer import show_result_overview_heat_map
+from visualizer.result_visualizer import ResultVisualizer
 
-show_result_overview_heat_map()
+visualizer = ResultVisualizer()
+visualizer.show_result_overview_heat_map()
