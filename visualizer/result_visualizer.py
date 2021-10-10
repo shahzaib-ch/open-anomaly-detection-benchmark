@@ -1,3 +1,4 @@
+import matplotlib
 import numpy as np
 import seaborn as sns
 from matplotlib import pyplot as plt
@@ -6,47 +7,13 @@ from matplotlib.patches import Rectangle
 from matplotlib.text import Text
 
 from helper.common_methods import round_xy_coordinates
+from visualizer.dataset_file_result_summary_window import DatasetResultSummaryWindow
 from visualizer.heatmap_helper import heatmap, annotate_heatmap
 from visualizer.result_collector import get_result_data_as_data_frame
 from visualizer.result_data_keys import ResultDataKey
 from visualizer.result_metric_calculators import add_accuracy_to_df, add_subfolder_name_to_df
 
-
-def visualize_single_dataset_file_result(data):
-    file_path = data[ResultDataKey.file_path].values[0]
-    dataset_name = data[ResultDataKey.dataset_name].values[0]
-    detector_name = data[ResultDataKey.detector_name].values[0]
-    accuracy = data[ResultDataKey.accuracy].values[0]
-    input_instances_train = data[ResultDataKey.input_instances_train].values[0]
-    input_instances_test = data[ResultDataKey.input_instances_test].values[0]
-    labels_train = data[ResultDataKey.labels_train].values[0]
-    labels_test = data[ResultDataKey.labels_test].values[0]
-    labels_detected = data[ResultDataKey.labels_detected].values[0]
-    subfolder = data[ResultDataKey.subfolder].values[0]
-    input_instances = np.concatenate((input_instances_train, input_instances_test))
-    labels = np.concatenate((labels_train, labels_test))
-
-    figure = plt.figure(len(plt.get_fignums()) + 1)
-    plt.plot(labels, label="Ground truth labels")
-    plt.plot(labels_detected, label="Detected labels by detector")
-    ax = figure.axes[0]
-    ax.legend()
-    title = detector_name + " performance on file: " + file_path
-    ax.set_title(title)
-    ax.set_ylabel("1 = anomaly, 0 = normal instance")
-    plt.show()
-
-    # __visualize_dataset(file_path, input_instances)
-
-
-def __visualize_dataset(file_path, input_instances):
-    figure = plt.figure(len(plt.get_fignums()) + 1)
-    plt.plot(input_instances)
-    ax = figure.axes[0]
-    title = file_path + " data"
-    ax.set_title(title)
-    ax.set_ylabel("values")
-    plt.show()
+matplotlib.use("TkAgg")
 
 
 class ResultVisualizer:
@@ -146,7 +113,7 @@ class ResultVisualizer:
                 file_path = file_paths[file_path_index]
                 print("Selected dataset file: ", file_path)
                 data = self.__get_result_of_detector_against_single_dataset_file(detector_name, dataset_name, file_path)
-                visualize_single_dataset_file_result(data)
+                self.visualize_single_dataset_file_result(data)
 
         figure.canvas.mpl_connect("pick_event", on_pick)
         ax = figure.axes[0]
@@ -177,3 +144,49 @@ class ResultVisualizer:
         plt.bar(file_paths, accuracy)
         plt.show()
     """
+
+    def visualize_single_dataset_file_result(self, data):
+        file_path = data[ResultDataKey.file_path].values[0]
+        dataset_name = data[ResultDataKey.dataset_name].values[0]
+        detector_name = data[ResultDataKey.detector_name].values[0]
+        accuracy = data[ResultDataKey.accuracy].values[0]
+        input_instances_train = data[ResultDataKey.input_instances_train].values[0]
+        input_instances_test = data[ResultDataKey.input_instances_test].values[0]
+        labels_train = data[ResultDataKey.labels_train].values[0]
+        labels_test = data[ResultDataKey.labels_test].values[0]
+        labels_detected = data[ResultDataKey.labels_detected].values[0]
+        subfolder = data[ResultDataKey.subfolder].values[0]
+        input_instances = np.concatenate((input_instances_train, input_instances_test))
+        labels = np.concatenate((labels_train, labels_test))
+
+        def visualize_dataset_clicked():
+            self.visualize_dataset(file_path, input_instances)
+
+        def visualize_dataset_with_anomalies_clicked():
+            self.visualize_dataset_with_anomalies(file_path, detector_name, input_instances, labels, labels_detected)
+
+        summary_window = DatasetResultSummaryWindow(
+            visualize_dataset_clicked,
+            visualize_dataset_with_anomalies_clicked
+        )
+        summary_window.show_window()
+
+    def visualize_dataset_with_anomalies(self, file_path, detector_name, input_instances, labels, labels_detected):
+        figure = plt.figure(len(plt.get_fignums()) + 1)
+        plt.plot(labels, label="Ground truth labels")
+        plt.plot(labels_detected, label="Detected labels by detector")
+        ax = figure.axes[0]
+        ax.legend()
+        title = detector_name + " performance on file: " + file_path
+        ax.set_title(title)
+        ax.set_ylabel("1 = anomaly, 0 = normal instance")
+        plt.show()
+
+    def visualize_dataset(self, file_path, input_instances):
+        figure = plt.figure(len(plt.get_fignums()) + 1)
+        plt.plot(input_instances)
+        ax = figure.axes[0]
+        title = file_path + " data"
+        ax.set_title(title)
+        ax.set_ylabel("values")
+        plt.show()
