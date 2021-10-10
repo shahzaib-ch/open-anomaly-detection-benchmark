@@ -9,3 +9,4 @@ class ResultDataKey:
     detector_name = "detector_name"
     file_path = "file_path"
     accuracy = "accuracy"
+    subfolder = "subfolder"
