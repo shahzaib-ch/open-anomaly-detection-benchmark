@@ -163,10 +163,10 @@ class ResultVisualizer:
             self.visualize_dataset(file_path, input_instances)
 
         def visualize_dataset_labels_clicked():
-            self.visualize_dataset_with_anomalies(file_path, detector_name, input_instances, labels, labels_detected)
+            self.visualize_dataset_labels(file_path, detector_name, labels, labels_detected)
 
         def visualize_dataset_with_anomalies():
-            print("hi")
+            self.visualize_dataset_with_anomalies(file_path, detector_name, input_instances, labels, labels_detected)
 
         summary_window = DatasetResultSummaryWindow(
             visualize_dataset_clicked,
@@ -175,7 +175,7 @@ class ResultVisualizer:
         )
         summary_window.show_window()
 
-    def visualize_dataset_with_anomalies(self, file_path, detector_name, input_instances, labels, labels_detected):
+    def visualize_dataset_labels(self, file_path, detector_name, labels, labels_detected):
         figure = plt.figure(len(plt.get_fignums()) + 1)
         plt.plot(labels, label="Ground truth labels")
         plt.plot(labels_detected, label="Detected labels by detector")
@@ -191,6 +191,34 @@ class ResultVisualizer:
         plt.plot(input_instances)
         ax = figure.axes[0]
         title = file_path + " data"
+        ax.set_title(title)
+        ax.set_ylabel("values")
+        plt.show()
+
+    def visualize_dataset_with_anomalies(self, file_path, detector_name, input_instances, labels, labels_detected):
+        dataset_length = np.arange(len(input_instances))
+        colors = []
+        for element in dataset_length:
+            is_detected = labels_detected[element] == 1
+            is_labeled = labels[element] == 1
+            color = 'b'
+            if is_detected & is_labeled:
+                color = 'g'
+            elif is_detected:
+                color = 'c'
+            elif is_labeled:
+                color = 'k'
+
+            colors.append(color)
+
+        figure = plt.figure(len(plt.get_fignums()) + 1)
+        if len(input_instances[0]) > 1:
+            plt.plot(dataset_length, input_instances, c=colors)
+        else:
+            plt.scatter(dataset_length, input_instances, c=colors)
+
+        ax = figure.axes[0]
+        title = file_path + " data with detector: " + detector_name
         ax.set_title(title)
         ax.set_ylabel("values")
         plt.show()
