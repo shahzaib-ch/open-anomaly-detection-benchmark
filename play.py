@@ -1,14 +1,8 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
-fig, ax = plt.subplots()
-ax.imshow(np.random.rand(10, 10), picker=True)
+from helper.labels_helper import convert_ucr_txt_file_oadb_standard_csv
 
-
-def onclick(event):
-    print(event)
-
-
-cid = fig.canvas.mpl_connect('pick_event', onclick)
-
-plt.show()
+convert_ucr_txt_file_oadb_standard_csv("/Users/shahzaib/Downloads/UCR_TimeSeriesAnomalyDatasets2021/FilesAreInHere"
+                                       "/UCR_Anomaly_FullData/",
+                                       "/Users/shahzaib/PycharmProjects/benchmark/data/datasets/ucr/")
