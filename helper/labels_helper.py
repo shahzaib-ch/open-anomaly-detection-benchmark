@@ -47,12 +47,12 @@ def remove_first_column_in_csv_file(file_path):
     print("Updated: " + file_path)
 
 
-def unpickle_result():
+def unpickle_result(input_file_path, output):
     """
     Converts results file to json in readable form
     """
-    dictionary = read_dictionary_from_file("result/benchmark_result")
-    with open("result/benchmark_result.json", 'w') as fp:
+    dictionary = read_dictionary_from_file(input_file_path)
+    with open(output, 'w') as fp:
         json.dump(dictionary, fp, cls=NumpyEncoder)
 
 
