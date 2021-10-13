@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from helper.common_methods import read_dictionary_from_file
+from helper.common_methods import read_dictionary_from_file, list_of_all_files_in_folder_and_subfolders
 from visualizer.result_data_keys import ResultDataKey
 
 """
@@ -29,27 +29,30 @@ Result format is:
 
 def get_result_data_as_data_frame():
     """
-    Reads data from result file and converts it to data frame
+    Reads data from result files and converts it to data frame
     """
     result_data_array = []
-    dictionary = read_dictionary_from_file("result/benchmark_result")
-    for detector_name, file_results in dictionary.items():
-        for file_result in file_results:
-            for file_path, result_of_file in file_result.items():
-                data = result_of_file[ResultDataKey.data]
-                input_instances_train = data[ResultDataKey.input_instances_train]
-                input_instances_test = data[ResultDataKey.input_instances_test]
-                labels_train = data[ResultDataKey.labels_train]
-                labels_test = data[ResultDataKey.labels_test]
-                labels_detected = data[ResultDataKey.labels_detected]
-                dataset_name = result_of_file[ResultDataKey.dataset_name]
-                if labels_detected.size != np.concatenate((labels_train, labels_test)).size:
-                    raise ValueError("labels of dataset and detected labels are not same for file: " +
-                                     file_path + " and detector: " + detector_name)
-                result_data_frame_row = __convert_to_result_data_frame_row(input_instances_train, input_instances_test,
-                                                                           labels_train, labels_test, labels_detected,
-                                                                           file_path, detector_name, dataset_name)
-                result_data_array.append(result_data_frame_row)
+    result_files = list_of_all_files_in_folder_and_subfolders("result/")
+    for file in result_files:
+        dictionary = read_dictionary_from_file(file)
+        result_of_file = dictionary[ResultDataKey.data]
+        file_path = result_of_file[ResultDataKey.dataset_file_path]
+        detector_name = result_of_file[ResultDataKey.detector_name]
+
+        data = result_of_file[ResultDataKey.data]
+        input_instances_train = data[ResultDataKey.input_instances_train]
+        input_instances_test = data[ResultDataKey.input_instances_test]
+        labels_train = data[ResultDataKey.labels_train]
+        labels_test = data[ResultDataKey.labels_test]
+        labels_detected = data[ResultDataKey.labels_detected]
+        dataset_name = result_of_file[ResultDataKey.dataset_name]
+        if labels_detected.size != np.concatenate((labels_train, labels_test)).size:
+            raise ValueError("labels of dataset and detected labels are not same for file: " +
+                             file_path + " and detector: " + detector_name)
+        result_data_frame_row = __convert_to_result_data_frame_row(input_instances_train, input_instances_test,
+                                                                   labels_train, labels_test, labels_detected,
+                                                                   file_path, detector_name, dataset_name)
+        result_data_array.append(result_data_frame_row)
     return __make_result_data_frame(result_data_array)
 
 
