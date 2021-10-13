@@ -10,3 +10,4 @@ class ResultDataKey:
     file_path = "file_path"
     accuracy = "accuracy"
     subfolder = "subfolder"
+    dataset_file_path = "dataset_file_path"
