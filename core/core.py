@@ -36,7 +36,7 @@ def do_benchmarking():
                 detector_result = __create_result_json(detector_name, dataset_name, dataset_file_path,
                                                        input_instances_train, input_instances_test, labels_train,
                                                        labels_test, complete_detected_labels)
-                __save_detector_result(detector_name, detector_result)
+                __save_detector_result(detector_name, dataset_name, dataset_file_path, detector_result)
 
 
 def __pre_process_data_set(dataset_file_path):
@@ -66,9 +66,10 @@ def __create_result_json(detector_name, dataset_name, dataset_file_path,
                          input_instances_train, input_instances_test, labels_train, labels_test,
                          complete_detected_labels):
     return {
-        dataset_file_path: {
+        "data": {
             "dataset_name": dataset_name,
             "detector_name": detector_name,
+            "dataset_file_path": dataset_file_path,
             "data": {
                 "input_instances_train": input_instances_train,
                 "input_instances_test": input_instances_test,
@@ -80,25 +81,17 @@ def __create_result_json(detector_name, dataset_name, dataset_file_path,
     }
 
 
-def __save_detector_result(detector_name, detector_result):
-    result_folder_path = "result"
-    result_file_path = "result/benchmark_result"
-    benchmark_result_dictionary = {}
-    detector_results_from_file = []
+def __save_detector_result(detector_name, dataset_name, dataset_file_path, detector_result):
+    dataset_file_path_parts = dataset_file_path.replace("data/datasets/", "").split("/")
+    file_name = dataset_file_path_parts[len(dataset_file_path_parts) - 1][:-4]
+    result_detector_dataset_folder_path = "/".join(dataset_file_path_parts[:-1])
+    result_detector_dataset_folder_path = "result/" + detector_name + "/" + result_detector_dataset_folder_path
+    result_file_path = result_detector_dataset_folder_path + "/" + file_name
 
-    if not os.path.isdir(result_folder_path):
-        os.mkdir(result_folder_path)
+    if not os.path.isdir(result_detector_dataset_folder_path):
+        os.makedirs(result_detector_dataset_folder_path)
 
-    if os.path.isfile(result_file_path):
-        benchmark_result_dictionary = read_dictionary_from_file(result_file_path)
-
-    if detector_name in benchmark_result_dictionary.keys():
-        detector_results_from_file = benchmark_result_dictionary.get(detector_name)
-
-    detector_results_from_file.append(detector_result)
-    benchmark_result_dictionary[detector_name] = detector_results_from_file
-
-    save_dictionary_to_file(benchmark_result_dictionary, result_file_path)
+    save_dictionary_to_file(detector_result, result_file_path)
 
 
 def __clearing_data_from_last_run():

@@ -13,7 +13,7 @@ def save_dictionary_to_file(dictionary, file_path):
     """
     Saves dictionary to file
     """
-    with open(file_path, 'wb') as f:
+    with open(file_path, 'wb+') as f:
         pickle.dump(dictionary, f, protocol=pickle.HIGHEST_PROTOCOL)
 
 
