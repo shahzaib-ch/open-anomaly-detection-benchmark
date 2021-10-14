@@ -1,6 +1,5 @@
 from abc import ABC
 
-from numpy import log
 from sklearn.covariance import EllipticEnvelope
 
 from detector.base_detector import BaseDetector
