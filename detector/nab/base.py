@@ -19,9 +19,6 @@
 # ----------------------------------------------------------------------
 
 import abc
-import sys
-
-import pandas
 
 
 class AnomalyDetector(object, metaclass=abc.ABCMeta):
@@ -71,45 +68,29 @@ class AnomalyDetector(object, metaclass=abc.ABCMeta):
         """
         raise NotImplementedError
 
-    def getHeader(self):
-        """
-        Gets the outputPath and all the headers needed to write the results files.
-        """
-        headers = ["timestamp",
-                   "value",
-                   "anomaly_score"]
-
-        headers.extend(self.getAdditionalHeaders())
-
-        return headers
-
     def run(self):
         """
         Main function that is called to collect anomaly scores for a given file.
         """
 
-        headers = self.getHeader()
-
-        rows = []
+        detectorValues = []
         for i, row in enumerate(self.dataSet):
 
-            detectorValues = self.handleRecord(row)
+            detectorValue = self.handleRecord(row)[0]
 
             # Make sure anomalyScore is between 0 and 1
-            if not 0 <= detectorValues[0] <= 1:
+            if not 0 <= detectorValue <= 1:
                 raise ValueError(
                     f"anomalyScore must be a number between 0 and 1. "
                     f"Please verify if '{self.handleRecord.__qualname__}' method is "
                     f"returning a value between 0 and 1")
 
-            outputRow = list(row) + list(detectorValues)
+            detectorValues.append(detectorValue)
 
-            rows.append(outputRow)
-
-            # Progress report
+            """"# Progress report
             if (i % 1000) == 0:
                 print(".", end=' ')
                 sys.stdout.flush()
+            """
 
-        ans = pandas.DataFrame(rows, columns=headers)
-        return ans
+        return detectorValues
