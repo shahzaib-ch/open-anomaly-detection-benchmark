@@ -1,8 +1,5 @@
 from abc import ABC, abstractmethod
 
-from sklearn.cluster import KMeans
-from sklearn.covariance import EllipticEnvelope
-
 
 class BaseDetector(ABC):
     model = None
