@@ -1,9 +1,12 @@
 import numpy as np
 
+from detector.nab.base import AnomalyDetector
 
-class KnncadDetectorNab:
 
-    def __init__(self):
+class KnncadDetectorNab(AnomalyDetector):
+
+    def __init__(self, *args, **kwargs):
+        super(KnncadDetectorNab, self).__init__(*args, **kwargs)
 
         self.buf = []
         self.training = []
@@ -14,7 +17,6 @@ class KnncadDetectorNab:
         self.k = 27
         self.dim = 19
         self.sigma = np.diag(np.ones(self.dim))
-        self.probationaryPeriod = 0
 
     def metric(self, a, b):
         diff = a - np.array(b)
@@ -26,7 +28,7 @@ class KnncadDetectorNab:
 
     def handleRecord(self, inputData):
         """
-        inputRow = inputData["value"]
+        inputRow is array of data
         """
         self.buf.append(inputData[0])
         self.record_count += 1
