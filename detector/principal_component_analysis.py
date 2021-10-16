@@ -1,17 +1,17 @@
 from abc import ABC
 
 import numpy as np
-from adtk.detector import GeneralizedESDTestAD
+from adtk.detector import GeneralizedESDTestAD, PcaAD
 
 from detector.base_detector import BaseDetector
 from helper.common_methods import add_date_time_index_to_df
 
 
-class GeneralizedESDTestDetector(BaseDetector, ABC):
+class PrincipalComponentAnalysisDetector(BaseDetector, ABC):
     __not_supported_datasets = []
 
     def createInstance(self):
-        self.model = GeneralizedESDTestAD()
+        self.model = PcaAD()
 
     def train(self, input_instances, labels):
         input_instances = add_date_time_index_to_df(input_instances)
@@ -21,7 +21,7 @@ class GeneralizedESDTestDetector(BaseDetector, ABC):
     def predict(self, input_instances):
         input_instances = add_date_time_index_to_df(input_instances)
         labels = self.model.detect(input_instances)
-        labels = np.where(labels.value == True, 1, 0)
+        labels = np.where(labels == True, 1, 0)
         return labels
 
     def notSupportedDatasets(self):
