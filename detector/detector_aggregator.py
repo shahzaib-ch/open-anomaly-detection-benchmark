@@ -1,4 +1,5 @@
 from detector.angle_based_outlier_detector import AngleBasedOutlierDetector
+from detector.auto_encoder import AutoEncoderDetector
 from detector.bayes_change_point import BayesChangePointDetector
 from detector.clustering_based_local_outlier_factor import ClusteringBasedLocalOutlierFactorDetector
 from detector.contextual_anomaly_detector import ContextualAnomalyDetector
@@ -26,5 +27,6 @@ ALGORITHMS_DICTIONARY = {
     # "One-class SVM": OneClassSupportVectorMachineDetector(),
     # "Angle-based Outlier Detector": AngleBasedOutlierDetector(),
     # "kNN": KNearestNeighborsDetector(),
-    "Clustering Based Local Outlier Factor": ClusteringBasedLocalOutlierFactorDetector(),
+    # "Clustering Based Local Outlier Factor": ClusteringBasedLocalOutlierFactorDetector(),
+    "Auto Encoder": AutoEncoderDetector(),
 }
