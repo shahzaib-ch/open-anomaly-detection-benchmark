@@ -141,7 +141,7 @@ class BayesChangePtDetectorNab(AnomalyDetector):
         # Update state vars.
         self.recordNumber += 1
         self.previousMaxRun = maxRecursiveRunLength
-        threshold = 99
+        threshold = 0.99
         return [1 if anomalyScore >= threshold else 0]
 
 
