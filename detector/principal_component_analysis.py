@@ -21,7 +21,7 @@ class PrincipalComponentAnalysisDetector(BaseDetector, ABC):
     def predict(self, input_instances):
         input_instances = add_date_time_index_to_df(input_instances)
         labels = self.model.detect(input_instances)
-        labels = np.where(labels == True, 1, 0)
+        labels = np.where(labels, 1, 0)
         return labels
 
     def notSupportedDatasets(self):

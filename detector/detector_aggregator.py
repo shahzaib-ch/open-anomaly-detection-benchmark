@@ -17,6 +17,6 @@ ALGORITHMS_DICTIONARY = {
     # "Expose": ExposeDetector(),
     # "Contextual Anomaly Detector": ContextualAnomalyDetector(),
     # "Relative Entropy": RelativeEntropyDetector(),
-    # "Generalized ESD Test": GeneralizedESDTestDetector(),
-    "Principal Component Analysis": PrincipalComponentAnalysisDetector(),
+    "Generalized ESD Test": GeneralizedESDTestDetector(),
+    # "Principal Component Analysis": PrincipalComponentAnalysisDetector(),
 }
