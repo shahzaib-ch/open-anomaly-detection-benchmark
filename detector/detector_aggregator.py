@@ -1,4 +1,5 @@
 from detector.bayes_change_point import BayesChangePointDetector
+from detector.expose import ExposeDetector
 from detector.knn_cad import KnncadDetector
 from detector.windowed_gaussian import WindowedGaussianDetector
 
@@ -8,5 +9,6 @@ ALGORITHMS_DICTIONARY = {
     # "Local Outlier Factor": LocalOutlierFactorDetector(),
     # "KNN CAD": KnncadDetector(),
     # "Windowed Gaussian": WindowedGaussianDetector(),
-    "Bayes Change Point": BayesChangePointDetector(),
+    # "Bayes Change Point": BayesChangePointDetector(),
+    "Expose": ExposeDetector(),
 }
