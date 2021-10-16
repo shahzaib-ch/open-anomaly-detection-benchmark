@@ -15,7 +15,7 @@ class OneClassSupportVectorMachineDetector(BaseDetector, ABC):
         self.model = OCSVM()
 
     def train(self, input_instances, labels):
-        self.model.fit(input_instances)
+        self.model.fit(input_instances, labels)
 
     def predict(self, input_instances):
         labels = self.model.predict(input_instances)
