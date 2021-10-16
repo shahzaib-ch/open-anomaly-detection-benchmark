@@ -3,7 +3,6 @@ from abc import ABC
 import numpy as np
 
 from detector.base_detector import BaseDetector
-from detector.nab.bayes_changept.bayes_changept_detector import BayesChangePtDetectorNab
 from detector.nab.expose.expose_detector import ExposeDetectorNab
 
 
