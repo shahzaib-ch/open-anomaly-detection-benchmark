@@ -1,7 +1,7 @@
 from abc import ABC
 
 import numpy as np
-from adtk.detector import GeneralizedESDTestAD, PcaAD
+from adtk.detector import PcaAD
 
 from detector.base_detector import BaseDetector
 from helper.common_methods import add_date_time_index_to_df

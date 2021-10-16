@@ -1,18 +1,18 @@
 from abc import ABC
 
-from pyod.models.ocsvm import OCSVM
+from pyod.models.cblof import CBLOF
 
 from detector.base_detector import BaseDetector
 
 
-class OneClassSupportVectorMachineDetector(BaseDetector, ABC):
+class ClusteringBasedLocalOutlierFactorDetector(BaseDetector, ABC):
     __not_supported_datasets = []
 
     def createInstance(self):
-        self.model = OCSVM()
+        self.model = CBLOF()
 
     def train(self, input_instances, labels):
-        self.model.fit(input_instances, labels)
+        self.model.fit(input_instances)
 
     def predict(self, input_instances):
         labels = self.model.predict(input_instances)
