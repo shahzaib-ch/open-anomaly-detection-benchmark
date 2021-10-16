@@ -1,3 +1,4 @@
+from detector.angle_based_outlier_detector import AngleBasedOutlierDetector
 from detector.bayes_change_point import BayesChangePointDetector
 from detector.contextual_anomaly_detector import ContextualAnomalyDetector
 from detector.expose import ExposeDetector
@@ -20,5 +21,6 @@ ALGORITHMS_DICTIONARY = {
     # "Relative Entropy": RelativeEntropyDetector(),
     # "Generalized ESD Test": GeneralizedESDTestDetector(),
     # "Principal Component Analysis": PrincipalComponentAnalysisDetector(),
-    "One-class SVM": OneClassSupportVectorMachineDetector(),
+    # "One-class SVM": OneClassSupportVectorMachineDetector(),
+    "Angle-based Outlier Detector": AngleBasedOutlierDetector(),
 }
