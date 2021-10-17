@@ -1,4 +1,4 @@
-from helper.labels_helper import unpickle_result
+from helper.labels_helper import convert_odd_mat_file_oadb_standard_csv
 
-unpickle_result("/Users/shahzaib/PycharmProjects/benchmark/result/Local Outlier "
-                "Factor/nab/artificialNoAnomaly/art_daily_no_noise", "rejkshd")
+convert_odd_mat_file_oadb_standard_csv("/Users/shahzaib/Desktop/odd", "/Users/shahzaib/PycharmProjects/benchmark/data"
+                                                                      "/datasets/odd")
