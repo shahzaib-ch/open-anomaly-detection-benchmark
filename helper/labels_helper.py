@@ -1,8 +1,10 @@
 import json
 from pathlib import Path
 
+import mat73
 import numpy as np
 import pandas as pd
+import scipy.io
 
 from data.dataset_collector import get_all_csv_files
 from helper.common_methods import read_dictionary_from_file
@@ -106,3 +108,22 @@ def convert_ucr_txt_file_oadb_standard_csv(source_folder_path, destination_folde
         file_path_parts.reverse()
         file_name = file_path_parts[0][:-4] + ".csv"
         file_data.to_csv(destination_folder_path + file_name, index_label="timestamp")
+
+
+def convert_odd_mat_file_oadb_standard_csv(source_folder_path, destination_folder_path):
+    path_list = Path(source_folder_path).rglob('*.mat')
+    for path in path_list:
+        path = str(path)
+        file_name = path.split("/")
+        file_name.reverse()
+        file_name = file_name[0].replace(".mat", "")
+        try:
+            data = scipy.io.loadmat(path)
+        except:
+            data = mat73.loadmat(path)
+
+        x = data["X"]
+        y = data["y"]
+        data = pd.DataFrame(x)
+        data["is_anomaly"] = y
+        data.to_csv(destination_folder_path + "/" + file_name + ".csv", index_label="timestamp")
