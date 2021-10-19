@@ -7,7 +7,7 @@ from detector.nab.relative_entropy.relative_entropy_detector import RelativeEntr
 
 
 class RelativeEntropyDetector(BaseDetector, ABC):
-    __not_supported_datasets = []
+    __not_supported_datasets = ["odd"]
     __input_instances_train = []
     __probationary_period = 0
 

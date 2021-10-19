@@ -7,7 +7,7 @@ from detector.nab.knncad.knncad_detector import KnncadDetectorNab
 
 
 class KnncadDetector(BaseDetector, ABC):
-    __not_supported_datasets = []
+    __not_supported_datasets = ["odd"]
     __input_instances_train = []
     __probationary_period = 0
 

@@ -7,7 +7,7 @@ from detector.nab.gaussian.windowedGaussian_detector import WindowedGaussianDete
 
 
 class WindowedGaussianDetector(BaseDetector, ABC):
-    __not_supported_datasets = []
+    __not_supported_datasets = ["odd"]
     __input_instances_train = []
     __probationary_period = 0
 
