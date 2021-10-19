@@ -9,7 +9,7 @@ from helper.common_methods import save_dictionary_to_file, list_contains
 from preprocessor.preprocessor import PreProcessor
 
 
-def do_benchmarking():
+def do_benchmarking(training_dataset_size):
     __clearing_data_from_last_run()
 
     dataset_collector = DatasetCollector()
@@ -30,7 +30,7 @@ def do_benchmarking():
                     continue
 
                 input_instances_train, input_instances_test, labels_train, labels_test = \
-                    __pre_process_data_set(dataset_file_path)
+                    __pre_process_data_set(dataset_file_path, training_dataset_size)
                 detected_labels, training_time, test_time = __run_detector_on_data(detector_instance,
                                                                                    input_instances_train,
                                                                                    input_instances_test, labels_train)
@@ -41,8 +41,8 @@ def do_benchmarking():
                 __save_detector_result(detector_name, dataset_name, dataset_file_path, detector_result)
 
 
-def __pre_process_data_set(dataset_file_path):
-    preprocessor = PreProcessor(dataset_file_path)
+def __pre_process_data_set(dataset_file_path, train_size):
+    preprocessor = PreProcessor(dataset_file_path, train_size)
     return preprocessor.get_input_instances_and_labels_split()
 
 
