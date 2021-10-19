@@ -1,4 +1,5 @@
 import os
+import time
 
 import numpy as np
 
@@ -30,12 +31,13 @@ def do_benchmarking():
 
                 input_instances_train, input_instances_test, labels_train, labels_test = \
                     __pre_process_data_set(dataset_file_path)
-                detected_labels = __run_detector_on_data(detector_instance, input_instances_train, input_instances_test,
-                                                         labels_train)
+                detected_labels, training_time, test_time = __run_detector_on_data(detector_instance,
+                                                                                   input_instances_train,
+                                                                                   input_instances_test, labels_train)
                 complete_detected_labels = np.concatenate((labels_train, detected_labels))
                 detector_result = __create_result_json(detector_name, dataset_name, dataset_file_path,
                                                        input_instances_train, input_instances_test, labels_train,
-                                                       labels_test, complete_detected_labels)
+                                                       labels_test, complete_detected_labels, training_time, test_time)
                 __save_detector_result(detector_name, dataset_name, dataset_file_path, detector_result)
 
 
@@ -55,21 +57,29 @@ def __run_detector_on_data(detector_instance, input_instances_train, input_insta
     # creating model
     detector_instance.createInstance()
 
+    start_time = time.monotonic()
     # training model
     detector_instance.train(input_instances_train, labels_train)
 
+    training_time = time.monotonic() - start_time
+    start_time = time.monotonic()
+
     # predicting/anomaly detection
-    return detector_instance.predict(input_instances_test)
+    detected_labels = detector_instance.predict(input_instances_test)
+    test_time = time.monotonic() - start_time
+    return detected_labels, training_time, test_time
 
 
 def __create_result_json(detector_name, dataset_name, dataset_file_path,
                          input_instances_train, input_instances_test, labels_train, labels_test,
-                         complete_detected_labels):
+                         complete_detected_labels, training_time, test_time):
     return {
         "data": {
             "dataset_name": dataset_name,
             "detector_name": detector_name,
             "dataset_file_path": dataset_file_path,
+            "training_time": training_time,
+            "test_time": test_time,
             "data": {
                 "input_instances_train": input_instances_train,
                 "input_instances_test": input_instances_test,
