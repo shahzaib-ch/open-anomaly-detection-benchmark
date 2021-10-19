@@ -11,3 +11,5 @@ class ResultDataKey:
     accuracy = "accuracy"
     subfolder = "subfolder"
     dataset_file_path = "dataset_file_path"
+    training_time = "training_time"
+    test_time = "test_time"
