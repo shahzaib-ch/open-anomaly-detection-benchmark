@@ -33,6 +33,8 @@ class KnncadDetectorNab(AnomalyDetector):
         self.buf.append(inputData[0])
         self.record_count += 1
 
+        print("processing instance no. ", self.record_count)
+
         if len(self.buf) < self.dim:
             return [0.0]
         else:

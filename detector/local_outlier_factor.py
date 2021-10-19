@@ -10,7 +10,7 @@ class LocalOutlierFactorDetector(BaseDetector, ABC):
     __not_supported_datasets = []
 
     def createInstance(self, features_count):
-        self.model = LocalOutlierFactor()
+        self.model = LocalOutlierFactor(novelty=True)
 
     def train(self, input_instances, labels):
         self.model.fit(input_instances, labels)
