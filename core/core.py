@@ -55,7 +55,7 @@ def __run_detector_on_data(detector_instance, input_instances_train, input_insta
     :param labels_train:
     """
     # creating model
-    features_count = len(input_instances_train[0])
+    features_count = input_instances_train.columns.size
     detector_instance.createInstance(features_count)
 
     start_time = time.monotonic()
