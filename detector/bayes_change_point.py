@@ -7,7 +7,7 @@ from detector.nab.bayes_changept.bayes_changept_detector import BayesChangePtDet
 
 
 class BayesChangePointDetector(BaseDetector, ABC):
-    __not_supported_datasets = []
+    __not_supported_datasets = ["odd"]
     __input_instances_train = []
     __probationary_period = 0
 

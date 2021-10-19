@@ -41,7 +41,18 @@ def list_of_all_files_in_folder_and_subfolders(path):
     return file_list
 
 
-def add_date_time_index_to_df(input_instances, index_start = "2021-10-15 00:00:00"):
+def add_date_time_index_to_df(input_instances, index_start="2021-10-15 00:00:00"):
     date_time_index = pd.date_range(index_start, periods=input_instances.size, freq="S")
     input_instances = input_instances.set_index(date_time_index)
     return input_instances
+
+
+def list_contains(dataset_path, not_supported_datasets):
+    if dataset_path in not_supported_datasets:
+        return True
+
+    for not_supported_dataset_path in not_supported_datasets:
+        if not_supported_dataset_path in dataset_path:
+            return True
+
+    return False

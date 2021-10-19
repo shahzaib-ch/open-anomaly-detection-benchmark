@@ -1,4 +1,4 @@
-from helper.labels_helper import convert_odd_mat_file_oadb_standard_csv
+from helper.common_methods import list_contains
 
-convert_odd_mat_file_oadb_standard_csv("/Users/shahzaib/Desktop/odd", "/Users/shahzaib/PycharmProjects/benchmark/data"
-                                                                      "/datasets/odd")
+l = list_contains("hi/hsd", ["hi"])
+print(l)
