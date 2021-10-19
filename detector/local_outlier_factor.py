@@ -1,6 +1,6 @@
 from abc import ABC
 
-from sklearn.ensemble import IsolationForest
+from sklearn.neighbors import LocalOutlierFactor
 
 from detector.base_detector import BaseDetector
 from helper.labels_helper import replace_in_array
@@ -10,7 +10,7 @@ class LocalOutlierFactorDetector(BaseDetector, ABC):
     __not_supported_datasets = []
 
     def createInstance(self):
-        self.model = IsolationForest(contamination=0.1)
+        self.model = LocalOutlierFactor()
 
     def train(self, input_instances, labels):
         self.model.fit(input_instances, labels)
