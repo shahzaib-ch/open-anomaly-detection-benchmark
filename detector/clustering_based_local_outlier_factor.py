@@ -8,7 +8,7 @@ from detector.base_detector import BaseDetector
 class ClusteringBasedLocalOutlierFactorDetector(BaseDetector, ABC):
     __not_supported_datasets = []
 
-    def createInstance(self):
+    def createInstance(self, features_count):
         self.model = CBLOF()
 
     def train(self, input_instances, labels):
