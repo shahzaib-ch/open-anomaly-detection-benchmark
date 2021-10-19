@@ -1,6 +1,5 @@
 from abc import ABC
 
-from pyod.models.abod import ABOD
 from pyod.models.knn import KNN
 
 from detector.base_detector import BaseDetector
