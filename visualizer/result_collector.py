@@ -46,7 +46,7 @@ def get_result_data_as_data_frame():
         labels_test = data[ResultDataKey.labels_test]
         labels_detected = data[ResultDataKey.labels_detected]
         dataset_name = result_of_file[ResultDataKey.dataset_name]
-        if labels_detected.size != np.concatenate((labels_train, labels_test)).size:
+        if len(labels_detected) != len(labels_test):
             raise ValueError("labels of dataset and detected labels are not same for file: " +
                              file_path + " and detector: " + detector_name)
         result_data_frame_row = __convert_to_result_data_frame_row(input_instances_train, input_instances_test,

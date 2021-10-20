@@ -25,6 +25,7 @@ class ExposeDetector(BaseDetector, ABC):
         self.model = ExposeDetectorNab(input_instances, self.__probationary_period)
         self.model.initialize()
         labels = self.model.run()
+        labels = labels[self.__input_instances_train.size:]
         return labels
 
     def notSupportedDatasets(self):
