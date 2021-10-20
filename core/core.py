@@ -80,7 +80,7 @@ def __run_detector_on_data(detector_instance, input_instances_train, input_insta
 
 def __create_result_json(detector_name, dataset_name, dataset_file_path,
                          input_instances_train, input_instances_test, labels_train, labels_test,
-                         complete_detected_labels, training_time, test_time):
+                         detected_labels, training_time, test_time):
     return {
         "data": {
             "dataset_name": dataset_name,
@@ -93,7 +93,7 @@ def __create_result_json(detector_name, dataset_name, dataset_file_path,
                 "input_instances_test": input_instances_test,
                 "labels_train": labels_train.to_numpy(),
                 "labels_test": labels_test.to_numpy(),
-                "labels_detected": complete_detected_labels
+                "labels_detected": detected_labels
             }
         }
     }
