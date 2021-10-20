@@ -39,7 +39,7 @@ def do_benchmarking(training_dataset_size, do_not_update_existing_result):
                 detected_labels, training_time, test_time = __run_detector_on_data(detector_instance,
                                                                                    input_instances_train,
                                                                                    input_instances_test, labels_train)
-                if labels_test.size != detected_labels:
+                if labels_test.size != detected_labels.size:
                     ValueError("detected_labels and labels_test are not same size: " + result_file_path)
 
                 detector_result = __create_result_json(detector_name, dataset_name, dataset_file_path,
