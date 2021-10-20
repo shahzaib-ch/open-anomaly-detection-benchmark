@@ -9,7 +9,7 @@ from helper.common_methods import save_dictionary_to_file, list_contains
 from preprocessor.preprocessor import PreProcessor
 
 
-def do_benchmarking(training_dataset_size):
+def do_benchmarking(training_dataset_size, do_not_update_existing_result):
     __clearing_data_from_last_run()
 
     dataset_collector = DatasetCollector()
@@ -29,6 +29,11 @@ def do_benchmarking(training_dataset_size):
                     print("Detector: " + detector_name + " is not suitable for " + dataset_file_path + "....")
                     continue
 
+                result_file_path = __create_result_file_path(detector_name, dataset_file_path)
+                if os.path.isfile(result_file_path) and do_not_update_existing_result:
+                    print("Detector: " + detector_name + " already has result for " + dataset_file_path + "....")
+                    continue
+
                 input_instances_train, input_instances_test, labels_train, labels_test = \
                     __pre_process_data_set(dataset_file_path, training_dataset_size)
                 detected_labels, training_time, test_time = __run_detector_on_data(detector_instance,
@@ -38,7 +43,7 @@ def do_benchmarking(training_dataset_size):
                 detector_result = __create_result_json(detector_name, dataset_name, dataset_file_path,
                                                        input_instances_train, input_instances_test, labels_train,
                                                        labels_test, complete_detected_labels, training_time, test_time)
-                __save_detector_result(detector_name, dataset_name, dataset_file_path, detector_result)
+                __save_detector_result(result_file_path, detector_result)
 
 
 def __pre_process_data_set(dataset_file_path, train_size):
@@ -92,7 +97,7 @@ def __create_result_json(detector_name, dataset_name, dataset_file_path,
     }
 
 
-def __save_detector_result(detector_name, dataset_name, dataset_file_path, detector_result):
+def __create_result_file_path(detector_name, dataset_file_path):
     dataset_file_path_parts = dataset_file_path.replace("data/datasets/", "").split("/")
     file_name = dataset_file_path_parts[len(dataset_file_path_parts) - 1][:-4]
     result_detector_dataset_folder_path = "/".join(dataset_file_path_parts[:-1])
@@ -102,6 +107,10 @@ def __save_detector_result(detector_name, dataset_name, dataset_file_path, detec
     if not os.path.isdir(result_detector_dataset_folder_path):
         os.makedirs(result_detector_dataset_folder_path)
 
+    return result_file_path
+
+
+def __save_detector_result(result_file_path, detector_result):
     save_dictionary_to_file(detector_result, result_file_path)
 
 

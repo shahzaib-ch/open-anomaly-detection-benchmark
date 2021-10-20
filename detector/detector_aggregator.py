@@ -19,11 +19,11 @@ ALGORITHMS_DICTIONARY = {
     # "Elliptic Envelope": EllipticEnvelopeDetector(),
     # "Isolation Forest": IsolationForestDetector(),
     # "Local Outlier Factor": LocalOutlierFactorDetector(),
-    "KNN CAD": KnncadDetector(),
-    "Windowed Gaussian": WindowedGaussianDetector(),
-    "Bayes Change Point": BayesChangePointDetector(),
-    "Expose": ExposeDetector(),
-    "Contextual Anomaly Detector": ContextualAnomalyDetector(),
+    # "KNN CAD": KnncadDetector(), pending
+    # "Windowed Gaussian": WindowedGaussianDetector(),
+    # "Bayes Change Point": BayesChangePointDetector(), pending
+    # "Expose": ExposeDetector(), pending
+    # "Contextual Anomaly Detector": ContextualAnomalyDetector(), pending
     "Relative Entropy": RelativeEntropyDetector(),
     "Generalized ESD Test": GeneralizedESDTestDetector(),
     "Principal Component Analysis": PrincipalComponentAnalysisDetector(),
