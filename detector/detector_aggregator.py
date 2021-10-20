@@ -24,10 +24,10 @@ ALGORITHMS_DICTIONARY = {
     # "Bayes Change Point": BayesChangePointDetector(), pending
     # "Expose": ExposeDetector(), pending
     # "Contextual Anomaly Detector": ContextualAnomalyDetector(), pending
-    "Relative Entropy": RelativeEntropyDetector(),
+    # "Relative Entropy": RelativeEntropyDetector(),
     # "Generalized ESD Test": GeneralizedESDTestDetector(),
     # "Principal Component Analysis": PrincipalComponentAnalysisDetector(),
-    # "One-class SVM": OneClassSupportVectorMachineDetector(),
+    "One-class SVM": OneClassSupportVectorMachineDetector(),
     # "Angle-based Outlier Detector": AngleBasedOutlierDetector(),
     # "kNN": KNearestNeighborsDetector(),
     # "Clustering Based Local Outlier Factor": ClusteringBasedLocalOutlierFactorDetector(),
