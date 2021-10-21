@@ -3,6 +3,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from pandas.plotting._matplotlib import scatter_matrix
 
 
 def visualize_overview():
@@ -80,13 +81,50 @@ def add_annotation(ax, text):
     ax.set_xlabel(text, labelpad=10)
 
 
-visualize_overview()
-
-
 def visualize_4_datasets():
     d1 = "/Users/shahzaib/PycharmProjects/benchmark/data/datasets/odd/annthyroid.csv"
-    d2 = "/Users/shahzaib/PycharmProjects/benchmark/data/datasets/nab/artificialWithAnomaly/art_load_balancer_spikes.csv"
-    d3 = "/Users/shahzaib/PycharmProjects/benchmark/data/datasets/ucr/019_UCR_Anomaly_DISTORTEDGP711MarkerLFM5z1_5000_6168_6212.csv"
-    d4 = "/Users/shahzaib/PycharmProjects/benchmark/data/datasets/yahoo/A2Benchmark/synthetic_12.csv"
+    d2 = "/Users/shahzaib/PycharmProjects/benchmark/data/datasets/nab/realTraffic/occupancy_6005.csv"
+    d3 = "/Users/shahzaib/PycharmProjects/benchmark/data/datasets/ucr/054_UCR_Anomaly_DISTORTEDWalkingAceleration5_2700_5920_5979.csv"
+    d4 = "/Users/shahzaib/PycharmProjects/benchmark/data/datasets/yahoo/A1Benchmark/real_14.csv"
+
+    d1 = pd.read_csv(d1)
+    d2 = pd.read_csv(d2)
+    d3 = pd.read_csv(d3)
+    d4 = pd.read_csv(d4)
+
+    d1 = d1.iloc[:, 1:-2]
+    d2 = d2.iloc[:, 1:-1]
+    d3 = d3.iloc[:, 1:-1]
+    d4 = d4.iloc[:, 1:-1]
+
+    fig, ax = plt.subplots(4)
+
+    add_annotation(ax[0], '(a) ODDS multidimensional dataset')
+    add_annotation(ax[1], '(b) NAB dataset')
+    add_annotation(ax[2], '(c) UCR dataset')
+    add_annotation(ax[3], '(d) Yahoo dataset')
+
+    ax[0].plot(d1.to_numpy())
+    ax[1].plot(d2.to_numpy())
+    ax[2].plot(d3.to_numpy())
+    ax[3].plot(d4.to_numpy())
+
+    fig.subplots_adjust(hspace=0)
+
+    fig.tight_layout()
+
+    plt.show()
 
 
+def visualize_multi_dimensional_file():
+    d1 = "/Users/shahzaib/PycharmProjects/benchmark/data/datasets/odd/annthyroid.csv"
+    d1 = pd.read_csv(d1)
+    d1 = d1.iloc[:, 1:-2]
+    scatter_matrix(d1, alpha=0.2, figsize=(6, 6), diagonal='kde')
+    plt.show()
+
+
+# visualize_multi_dimensional_file()
+
+
+visualize_4_datasets()
