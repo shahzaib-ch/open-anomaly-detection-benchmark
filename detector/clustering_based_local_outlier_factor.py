@@ -6,7 +6,10 @@ from detector.base_detector import BaseDetector
 
 
 class ClusteringBasedLocalOutlierFactorDetector(BaseDetector, ABC):
-    __not_supported_datasets = []
+    __not_supported_datasets = ["data/datasets/nab/artificialNoAnomaly/art_daily_perfect_square_wave.csv",
+                                "data/datasets/nab/artificialNoAnomaly/art_noisy.csv",
+                                "data/datasets/nab/artificialNoAnomaly/art_flatline.csv",
+                                "data/datasets/yahoo/A4Benchmark/A4Benchmark-TS42.csv"]
 
     def createInstance(self, features_count):
         self.model = CBLOF()
