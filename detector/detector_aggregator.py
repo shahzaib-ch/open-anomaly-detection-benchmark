@@ -28,8 +28,8 @@ ALGORITHMS_DICTIONARY = {
     # "Generalized ESD Test": GeneralizedESDTestDetector(),
     # "Principal Component Analysis": PrincipalComponentAnalysisDetector(),
     # "One-class SVM": OneClassSupportVectorMachineDetector(),
-    # "Angle-based Outlier Detector": AngleBasedOutlierDetector(),
+    "Angle-based Outlier Detector": AngleBasedOutlierDetector(),
     # "kNN": KNearestNeighborsDetector(),
-    "Clustering Based Local Outlier Factor": ClusteringBasedLocalOutlierFactorDetector(),
+    # "Clustering Based Local Outlier Factor": ClusteringBasedLocalOutlierFactorDetector(),
     # "Auto Encoder": AutoEncoderDetector(),
 }

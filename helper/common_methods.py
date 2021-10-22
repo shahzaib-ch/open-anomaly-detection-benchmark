@@ -56,3 +56,10 @@ def list_contains(dataset_path, not_supported_datasets):
             return True
 
     return False
+
+
+def convert_data_frame_to_float(df):
+    for column_name in df.columns:
+        df[column_name] = pd.to_numeric(df[column_name], downcast='float')
+
+    return df
