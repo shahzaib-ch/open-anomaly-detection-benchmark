@@ -22,13 +22,13 @@ ALGORITHMS_DICTIONARY = {
     # "KNN CAD": KnncadDetector(), pending
     # "Windowed Gaussian": WindowedGaussianDetector(),
     # "Bayes Change Point": BayesChangePointDetector(), pending
-    # "Expose": ExposeDetector(), pending
+    "Expose": ExposeDetector(),
     # "Contextual Anomaly Detector": ContextualAnomalyDetector(), pending
     # "Relative Entropy": RelativeEntropyDetector(),
     # "Generalized ESD Test": GeneralizedESDTestDetector(),
     # "Principal Component Analysis": PrincipalComponentAnalysisDetector(),
     # "One-class SVM": OneClassSupportVectorMachineDetector(),
-    "Angle-based Outlier Detector": AngleBasedOutlierDetector(),
+    # "Angle-based Outlier Detector": AngleBasedOutlierDetector(),
     # "kNN": KNearestNeighborsDetector(),
     # "Clustering Based Local Outlier Factor": ClusteringBasedLocalOutlierFactorDetector(),
     # "Auto Encoder": AutoEncoderDetector(),
