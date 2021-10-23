@@ -13,7 +13,7 @@ def do_benchmarking(training_dataset_size, do_not_update_existing_result):
 
     args = get_list_of_args_for_detector_run(training_dataset_size, do_not_update_existing_result)
 
-    with Pool(5) as p:
+    with Pool(10) as p:
         p.map_async(run_detector, args)
         p.close()
         p.join()
