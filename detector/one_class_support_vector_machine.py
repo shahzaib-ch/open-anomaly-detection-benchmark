@@ -6,7 +6,7 @@ from detector.base_detector import BaseDetector
 
 
 class OneClassSupportVectorMachineDetector(BaseDetector, ABC):
-    __not_supported_datasets = ["ucr"]
+    __not_supported_datasets = []
 
     def createInstance(self, features_count):
         self.model = OCSVM(cache_size=4000)
