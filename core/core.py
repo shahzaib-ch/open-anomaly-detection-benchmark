@@ -1,6 +1,6 @@
 import os
-import threading
 import time
+from multiprocessing import Pool
 
 from data.dataset_collector import DatasetCollector
 from detector.detector_aggregator import ALGORITHMS_DICTIONARY
@@ -11,6 +11,16 @@ from preprocessor.preprocessor import PreProcessor
 def do_benchmarking(training_dataset_size, do_not_update_existing_result):
     __clearing_data_from_last_run()
 
+    args = get_list_of_args_for_detector_run(training_dataset_size, do_not_update_existing_result)
+
+    with Pool(5) as p:
+        p.map_async(run_detector, args)
+        p.close()
+        p.join()
+
+
+def get_list_of_args_for_detector_run(training_dataset_size, do_not_update_existing_result):
+    args = []
     dataset_collector = DatasetCollector()
     datasets = dataset_collector.get_all_csv_files_in_datasets_folder()
     print("Got these datasets: " + str(datasets.keys()))
@@ -22,7 +32,6 @@ def do_benchmarking(training_dataset_size, do_not_update_existing_result):
         for dataset_name, files_path_array in datasets.items():
 
             for dataset_file_path in files_path_array:
-                print("Evaluating detector: " + detector_name + " on file " + dataset_file_path + "....")
 
                 if list_contains(dataset_file_path, detector_instance.notSupportedDatasets()):
                     print("Detector: " + detector_name + " is not suitable for " + dataset_file_path + "....")
@@ -33,10 +42,10 @@ def do_benchmarking(training_dataset_size, do_not_update_existing_result):
                     print("Detector: " + detector_name + " already has result for " + dataset_file_path + "....")
                     continue
 
-                thread = threading.Thread(target=run_detector, args=(dataset_file_path, training_dataset_size,
-                                                                     detector_instance, result_file_path, dataset_name))
-                thread.start()
-                thread.join()
+                args.append([dataset_file_path, training_dataset_size,
+                             detector_instance, result_file_path, dataset_name, detector_name])
+
+    return args
 
 
 def __pre_process_data_set(dataset_file_path, train_size):
@@ -44,7 +53,16 @@ def __pre_process_data_set(dataset_file_path, train_size):
     return preprocessor.get_input_instances_and_labels_split()
 
 
-def run_detector(dataset_file_path, training_dataset_size, detector_instance, result_file_path, dataset_name):
+def run_detector(args):
+    dataset_file_path = args[0]
+    training_dataset_size = args[1]
+    detector_instance = args[2]
+    result_file_path = args[3]
+    dataset_name = args[4]
+    detector_name = args[5]
+
+    print("Evaluating detector: " + detector_name + " on file " + dataset_file_path + "....")
+
     input_instances_train, input_instances_test, labels_train, labels_test = \
         __pre_process_data_set(dataset_file_path, training_dataset_size)
     detected_labels, training_time, test_time = __run_detector_on_data(detector_instance,
@@ -57,6 +75,7 @@ def run_detector(dataset_file_path, training_dataset_size, detector_instance, re
                                            input_instances_train, input_instances_test, labels_train,
                                            labels_test, detected_labels, training_time, test_time)
     __save_detector_result(result_file_path, detector_result)
+    print("saved result: ", result_file_path)
 
 
 def __run_detector_on_data(detector_instance, input_instances_train, input_instances_test, labels_train):
