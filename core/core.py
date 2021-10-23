@@ -1,7 +1,6 @@
 import os
+import threading
 import time
-
-import numpy as np
 
 from data.dataset_collector import DatasetCollector
 from detector.detector_aggregator import ALGORITHMS_DICTIONARY
@@ -34,23 +33,30 @@ def do_benchmarking(training_dataset_size, do_not_update_existing_result):
                     print("Detector: " + detector_name + " already has result for " + dataset_file_path + "....")
                     continue
 
-                input_instances_train, input_instances_test, labels_train, labels_test = \
-                    __pre_process_data_set(dataset_file_path, training_dataset_size)
-                detected_labels, training_time, test_time = __run_detector_on_data(detector_instance,
-                                                                                   input_instances_train,
-                                                                                   input_instances_test, labels_train)
-                if labels_test.size != detected_labels.size:
-                    ValueError("detected_labels and labels_test are not same size: " + result_file_path)
-
-                detector_result = __create_result_json(detector_name, dataset_name, dataset_file_path,
-                                                       input_instances_train, input_instances_test, labels_train,
-                                                       labels_test, detected_labels, training_time, test_time)
-                __save_detector_result(result_file_path, detector_result)
+                thread = threading.Thread(target=run_detector, args=(dataset_file_path, training_dataset_size,
+                                                                     detector_instance, result_file_path, dataset_name))
+                thread.start()
+                thread.join()
 
 
 def __pre_process_data_set(dataset_file_path, train_size):
     preprocessor = PreProcessor(dataset_file_path, train_size)
     return preprocessor.get_input_instances_and_labels_split()
+
+
+def run_detector(dataset_file_path, training_dataset_size, detector_instance, result_file_path, dataset_name):
+    input_instances_train, input_instances_test, labels_train, labels_test = \
+        __pre_process_data_set(dataset_file_path, training_dataset_size)
+    detected_labels, training_time, test_time = __run_detector_on_data(detector_instance,
+                                                                       input_instances_train,
+                                                                       input_instances_test, labels_train)
+    if labels_test.size != detected_labels.size:
+        ValueError("detected_labels and labels_test are not same size: " + result_file_path)
+
+    detector_result = __create_result_json(result_file_path, dataset_name, dataset_file_path,
+                                           input_instances_train, input_instances_test, labels_train,
+                                           labels_test, detected_labels, training_time, test_time)
+    __save_detector_result(result_file_path, detector_result)
 
 
 def __run_detector_on_data(detector_instance, input_instances_train, input_instances_test, labels_train):
