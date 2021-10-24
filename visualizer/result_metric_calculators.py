@@ -14,7 +14,7 @@ def add_accuracy_to_df(result_data_frame):
 
 
 def __calculate_accuracy_score(row):
-    labels = np.concatenate((row[ResultDataKey.labels_train], row[ResultDataKey.labels_test]))
+    labels = row[ResultDataKey.labels_test]
     labels_detected = row[ResultDataKey.labels_detected]
     return accuracy_score(labels, labels_detected)
 
