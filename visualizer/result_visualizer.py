@@ -1,5 +1,6 @@
 import matplotlib
 import numpy as np
+import pandas as pd
 import seaborn as sns
 from matplotlib import pyplot as plt
 from matplotlib.image import AxesImage
@@ -7,13 +8,34 @@ from matplotlib.patches import Rectangle
 from matplotlib.text import Text
 
 from helper.common_methods import round_xy_coordinates
-from visualizer.dataset_file_result_summary_window import DatasetResultSummaryWindow
 from visualizer.heatmap_helper import heatmap, annotate_heatmap
 from visualizer.result_collector import get_result_data_as_data_frame
 from visualizer.result_data_keys import ResultDataKey
 from visualizer.result_metric_calculators import add_accuracy_to_df, add_subfolder_name_to_df, add_f1_score_to_df
 
 matplotlib.use("TkAgg")
+
+
+def visualize_dataset_labels(file_path, detector_name, labels, labels_detected):
+    figure = plt.figure(len(plt.get_fignums()) + 1)
+    plt.plot(labels, label="Ground truth labels")
+    plt.plot(labels_detected, label="Detected labels by detector")
+    ax = figure.axes[0]
+    ax.legend()
+    title = detector_name + " performance on file: " + file_path
+    ax.set_title(title)
+    ax.set_ylabel("1 = anomaly, 0 = normal instance")
+    plt.show()
+
+
+def visualize_dataset(file_path, input_instances):
+    figure = plt.figure(len(plt.get_fignums()) + 1)
+    plt.plot(input_instances)
+    ax = figure.axes[0]
+    title = file_path + " data"
+    ax.set_title(title)
+    ax.set_ylabel("values")
+    plt.show()
 
 
 class ResultVisualizer:
@@ -164,13 +186,17 @@ class ResultVisualizer:
         labels = np.concatenate((labels_train, labels_test))
 
         def visualize_dataset_clicked():
-            self.visualize_dataset(file_path, input_instances)
+            visualize_dataset(file_path, input_instances)
 
         def visualize_dataset_labels_clicked():
-            self.visualize_dataset_labels(file_path, detector_name, labels, labels_detected)
+            visualize_dataset_labels(file_path, detector_name, labels, labels_detected)
 
         def visualize_dataset_with_anomalies():
-            self.visualize_dataset_with_anomalies(file_path, detector_name, input_instances, labels, labels_detected)
+            self.visualize_dataset_with_anomalies(file_path, detector_name, input_instances_train,
+                                                  labels_test, labels_detected)
+
+        visualize_dataset_with_anomalies()
+        """
 
         summary_window = DatasetResultSummaryWindow(
             visualize_dataset_clicked,
@@ -178,33 +204,14 @@ class ResultVisualizer:
             visualize_dataset_with_anomalies
         )
         summary_window.show_window()
+        """
 
-    def visualize_dataset_labels(self, file_path, detector_name, labels, labels_detected):
-        figure = plt.figure(len(plt.get_fignums()) + 1)
-        plt.plot(labels, label="Ground truth labels")
-        plt.plot(labels_detected, label="Detected labels by detector")
-        ax = figure.axes[0]
-        ax.legend()
-        title = detector_name + " performance on file: " + file_path
-        ax.set_title(title)
-        ax.set_ylabel("1 = anomaly, 0 = normal instance")
-        plt.show()
-
-    def visualize_dataset(self, file_path, input_instances):
-        figure = plt.figure(len(plt.get_fignums()) + 1)
-        plt.plot(input_instances)
-        ax = figure.axes[0]
-        title = file_path + " data"
-        ax.set_title(title)
-        ax.set_ylabel("values")
-        plt.show()
-
-    def visualize_dataset_with_anomalies(self, file_path, detector_name, input_instances, labels, labels_detected):
-        dataset_length = np.arange(len(input_instances))
+    def visualize_dataset_with_anomalies(self, file_path, detector_name, input_instances_train, labels_test, labels_detected):
+        dataset_length = np.arange(len(input_instances_train))
         colors = []
         for element in dataset_length:
             is_detected = labels_detected[element] == 1
-            is_labeled = labels[element] == 1
+            is_labeled = labels_test[element] == 1
             color = 'b'
             if is_detected & is_labeled:
                 color = 'g'
@@ -216,10 +223,14 @@ class ResultVisualizer:
             colors.append(color)
 
         figure = plt.figure(len(plt.get_fignums()) + 1)
-        if len(input_instances[0]) > 1:
-            plt.plot(dataset_length, input_instances, c=colors)
+        if isinstance(input_instances_train, pd.DataFrame):
+            length = input_instances_train.to_numpy()[0][0]
         else:
-            plt.scatter(dataset_length, input_instances, c=colors)
+            length = len(input_instances_train[0])
+        if length <= 1:
+            plt.plot(dataset_length, input_instances_train, c=colors)
+        else:
+            plt.scatter(dataset_length, input_instances_train, c=colors)
 
         ax = figure.axes[0]
         title = file_path + " data with detector: " + detector_name
