@@ -10,7 +10,7 @@ class EllipticEnvelopeDetector(BaseDetector, ABC):
     __not_supported_datasets = ['data/datasets/nab/artificialNoAnomaly/art_flatline.csv']
 
     def createInstance(self, features_count):
-        self.model = EllipticEnvelope(random_state=10, support_fraction=1)
+        self.model = EllipticEnvelope(support_fraction=1)
 
     def train(self, input_instances, labels):
         self.model.fit(input_instances, labels)
