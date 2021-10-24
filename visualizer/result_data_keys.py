@@ -13,3 +13,4 @@ class ResultDataKey:
     dataset_file_path = "dataset_file_path"
     training_time = "training_time"
     test_time = "test_time"
+    f1_score = "F1 score"
