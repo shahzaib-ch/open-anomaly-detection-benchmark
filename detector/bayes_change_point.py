@@ -26,7 +26,7 @@ class BayesChangePointDetector(BaseDetector, ABC):
         self.model.initialize()
         labels = self.model.run()
         labels = labels[self.__input_instances_train.size:]
-        return labels
+        return np.asarray(labels)
 
     def notSupportedDatasets(self):
         return self.__not_supported_datasets
