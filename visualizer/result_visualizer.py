@@ -11,21 +11,25 @@ from visualizer.dataset_file_result_summary_window import DatasetResultSummaryWi
 from visualizer.heatmap_helper import heatmap, annotate_heatmap
 from visualizer.result_collector import get_result_data_as_data_frame
 from visualizer.result_data_keys import ResultDataKey
-from visualizer.result_metric_calculators import add_accuracy_to_df, add_subfolder_name_to_df
+from visualizer.result_metric_calculators import add_accuracy_to_df, add_subfolder_name_to_df, add_f1_score_to_df
 
 matplotlib.use("TkAgg")
 
 
 class ResultVisualizer:
 
-    def __init__(self):
+    def __init__(self, accuracy_measure):
+        self.accuracy_measure = accuracy_measure
         self.result_data_frame = get_result_data_as_data_frame()
-        self.result_data_frame = add_accuracy_to_df(self.result_data_frame)
+        if accuracy_measure == ResultDataKey.accuracy:
+            self.result_data_frame = add_accuracy_to_df(self.result_data_frame)
+        if accuracy_measure == ResultDataKey.f1_score:
+            self.result_data_frame = add_f1_score_to_df(self.result_data_frame)
         self.result_data_frame = add_subfolder_name_to_df(self.result_data_frame)
 
     def show_full_detailed_result_heat_map(self):
         heat_map_df = self.result_data_frame.loc[:,
-                      (ResultDataKey.detector_name, ResultDataKey.file_path, ResultDataKey.accuracy)]
+                      (ResultDataKey.detector_name, ResultDataKey.file_path, self.accuracy_measure)]
         heat_map_df = heat_map_df.pivot(index=ResultDataKey.file_path, columns=ResultDataKey.detector_name)
         ax = sns.heatmap(heat_map_df, cmap='BuPu')
         ax.set_title("Heatmap of each detector accuracy for each dataset")
@@ -33,7 +37,7 @@ class ResultVisualizer:
 
     def show_result_overview_heat_map(self):
         heat_map_df = self.result_data_frame.loc[:,
-                      (ResultDataKey.detector_name, ResultDataKey.dataset_name, ResultDataKey.accuracy)]
+                      (ResultDataKey.detector_name, ResultDataKey.dataset_name, self.accuracy_measure)]
         heat_map_df = heat_map_df.groupby([ResultDataKey.detector_name, ResultDataKey.dataset_name],
                                           as_index=False).mean()
         heat_map_df = heat_map_df.pivot(index=ResultDataKey.detector_name, columns=ResultDataKey.dataset_name)
@@ -67,11 +71,11 @@ class ResultVisualizer:
         result_data_frame = self.result_data_frame
         bar_df = result_data_frame[
             (result_data_frame.detector_name == detector_name) & (result_data_frame.dataset_name == dataset_name)]
-        bar_df = bar_df.loc[:, (ResultDataKey.subfolder, ResultDataKey.accuracy)]
+        bar_df = bar_df.loc[:, (ResultDataKey.subfolder, self.accuracy_measure)]
         bar_df = bar_df.groupby([ResultDataKey.subfolder],
                                 as_index=False).mean()
         subfolders = bar_df[ResultDataKey.subfolder].to_numpy()
-        accuracy = bar_df[ResultDataKey.accuracy].to_numpy()
+        accuracy = bar_df[self.accuracy_measure].to_numpy()
 
         figure = plt.figure(len(plt.get_fignums()) + 1)
         plt.bar(subfolders, accuracy, picker=True)
@@ -99,10 +103,10 @@ class ResultVisualizer:
             (result_data_frame.detector_name == detector_name) & (
                     result_data_frame.dataset_name == dataset_name) & (result_data_frame.subfolder == subfolder)]
 
-        bar_df = bar_df.loc[:, (ResultDataKey.file_path, ResultDataKey.accuracy)]
+        bar_df = bar_df.loc[:, (ResultDataKey.file_path, self.accuracy_measure)]
 
         file_paths = bar_df[ResultDataKey.file_path].to_numpy()
-        accuracy = bar_df[ResultDataKey.accuracy].to_numpy()
+        accuracy = bar_df[self.accuracy_measure].to_numpy()
         figure = plt.figure(len(plt.get_fignums()) + 1)
         plt.bar(file_paths, accuracy, picker=True)
 
@@ -137,9 +141,9 @@ class ResultVisualizer:
         heat_map_df = add_accuracy_to_df(self.result_data_frame)
         heat_map_df = heat_map_df[
             (heat_map_df.detector_name == detector_name) & (heat_map_df.dataset_name == dataset_name)]
-        heat_map_df = heat_map_df.loc[:, (ResultDataKey.file_path, ResultDataKey.accuracy)]
+        heat_map_df = heat_map_df.loc[:, (ResultDataKey.file_path, self.accuracy_measure)]
         file_paths = heat_map_df[ResultDataKey.file_path].to_numpy()
-        accuracy = heat_map_df[ResultDataKey.accuracy].to_numpy()
+        accuracy = heat_map_df[self.accuracy_measure].to_numpy()
         plt.figure(len(plt.get_fignums()) + 1)
         plt.bar(file_paths, accuracy)
         plt.show()
@@ -149,7 +153,7 @@ class ResultVisualizer:
         file_path = data[ResultDataKey.file_path].values[0]
         dataset_name = data[ResultDataKey.dataset_name].values[0]
         detector_name = data[ResultDataKey.detector_name].values[0]
-        accuracy = data[ResultDataKey.accuracy].values[0]
+        accuracy = data[self.accuracy_measure].values[0]
         input_instances_train = data[ResultDataKey.input_instances_train].values[0]
         input_instances_test = data[ResultDataKey.input_instances_test].values[0]
         labels_train = data[ResultDataKey.labels_train].values[0]

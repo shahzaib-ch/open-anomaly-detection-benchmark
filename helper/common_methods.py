@@ -36,6 +36,8 @@ def list_of_all_files_in_folder_and_subfolders(path):
     for root, dirs, files in os.walk(path):
         for file in files:
             # append the file name to the list
+            if file == '.DS_Store':
+                continue
             file_list.append(os.path.join(root, file))
 
     return file_list
