@@ -13,8 +13,11 @@ def do_benchmarking(training_dataset_size, do_not_update_existing_result):
 
     args = get_list_of_args_for_detector_run(training_dataset_size, do_not_update_existing_result)
 
-    with Pool(10) as p:
-        p.map_async(run_detector, args)
+    def error_func(exception):
+        raise exception
+
+    with Pool(1) as p:
+        p.map_async(run_detector, args, error_callback=error_func)
         p.close()
         p.join()
 
@@ -68,14 +71,19 @@ def run_detector(args):
     detected_labels, training_time, test_time = __run_detector_on_data(detector_instance,
                                                                        input_instances_train,
                                                                        input_instances_test, labels_train)
-    if labels_test.size != detected_labels.size:
-        ValueError("detected_labels and labels_test are not same size: " + result_file_path)
 
-    detector_result = __create_result_json(result_file_path, dataset_name, dataset_file_path,
+    if len(detected_labels) != len(labels_test) or len(input_instances_train) != len(labels_train) \
+            or len(input_instances_test) != len(labels_test):
+        raise ValueError("labels of dataset and detected labels are not same for file: " +
+                         dataset_file_path + " and detector: " + detector_name + "or similar issue")
+
+    detector_result = __create_result_json(detector_name, dataset_name, dataset_file_path,
                                            input_instances_train, input_instances_test, labels_train,
                                            labels_test, detected_labels, training_time, test_time)
     __save_detector_result(result_file_path, detector_result)
     print("saved result: ", result_file_path)
+
+    return True
 
 
 def __run_detector_on_data(detector_instance, input_instances_train, input_instances_test, labels_train):
@@ -87,7 +95,7 @@ def __run_detector_on_data(detector_instance, input_instances_train, input_insta
     :param labels_train:
     """
     # creating model
-    features_count = input_instances_train.columns.size
+    features_count = input_instances_train[0].size
     detector_instance.createInstance(features_count)
 
     start_time = time.monotonic()
@@ -116,8 +124,8 @@ def __create_result_json(detector_name, dataset_name, dataset_file_path,
             "data": {
                 "input_instances_train": input_instances_train,
                 "input_instances_test": input_instances_test,
-                "labels_train": labels_train.to_numpy(),
-                "labels_test": labels_test.to_numpy(),
+                "labels_train": labels_train,
+                "labels_test": labels_test,
                 "labels_detected": detected_labels
             }
         }

@@ -6,6 +6,7 @@ from matplotlib import pyplot as plt
 from matplotlib.image import AxesImage
 from matplotlib.patches import Rectangle
 from matplotlib.text import Text
+from pandas.plotting._matplotlib import parallel_coordinates
 
 from helper.common_methods import round_xy_coordinates
 from visualizer.heatmap_helper import heatmap, annotate_heatmap
@@ -193,7 +194,7 @@ class ResultVisualizer:
 
         def visualize_dataset_with_anomalies():
             self.visualize_dataset_with_anomalies(file_path, detector_name, input_instances_train,
-                                                  labels_test, labels_detected)
+                                                  input_instances_test, labels_train, labels_test, labels_detected)
 
         visualize_dataset_with_anomalies()
         """
@@ -206,34 +207,74 @@ class ResultVisualizer:
         summary_window.show_window()
         """
 
-    def visualize_dataset_with_anomalies(self, file_path, detector_name, input_instances_train, labels_test, labels_detected):
-        dataset_length = np.arange(len(input_instances_train))
+    def visualize_dataset_with_anomalies(self, file_path, detector_name, input_instances_train,
+                                         input_instances_test, labels_train, labels_test, labels_detected):
+        input_instances = np.concatenate((input_instances_train, input_instances_test))
+        labels_detected_joined = np.concatenate((labels_train, labels_detected))
+        labels_test_joined = np.concatenate((labels_train, labels_test))
+        dataset_length = np.arange(len(input_instances))
+
+        x_detected = []
+        y_detected = []
+        detected_color = 'mo'
+
+        x_labelled = []
+        y_labelled = []
+        labelled_color = 'ro'
+
+        x_detected_and_labelled = []
+        y_detected_and_labelled = []
+        detected_and_labelled_color = 'go'
+
         colors = []
+        data_class = []
         for element in dataset_length:
-            is_detected = labels_detected[element] == 1
-            is_labeled = labels_test[element] == 1
+            is_detected = labels_detected_joined[element] == 1
+            is_labeled = labels_test_joined[element] == 1
+            if element < len(input_instances_train) & is_labeled:
+                color = 'r'
+                x_labelled.append(element)
+                y_labelled.append(input_instances[element])
+                colors.append(color)
+                data_class.append("Actual anomaly")
+                continue
+
             color = 'b'
             if is_detected & is_labeled:
                 color = 'g'
+                x_detected_and_labelled.append(element)
+                y_detected_and_labelled.append(input_instances[element])
+                data_class.append("Actual anomaly and detected")
             elif is_detected:
-                color = 'c'
+                color = 'm'
+                x_detected.append(element)
+                y_detected.append(input_instances[element])
+                data_class.append("Detected anomaly")
             elif is_labeled:
-                color = 'k'
-
+                color = 'r'
+                x_labelled.append(element)
+                y_labelled.append(input_instances[element])
+                data_class.append("Actual anomaly")
+            else:
+                data_class.append("Normal instance")
             colors.append(color)
-
         figure = plt.figure(len(plt.get_fignums()) + 1)
-        if isinstance(input_instances_train, pd.DataFrame):
-            length = input_instances_train.to_numpy()[0][0]
+        feature_count = len(input_instances_train[0])
+        if feature_count <= 1:
+            plt.plot(dataset_length, input_instances, label="Data instances")
+            plt.plot(x_labelled, y_labelled, labelled_color, label="Actual anomalies")
+            plt.plot(x_detected, y_detected, detected_color, label="Anomalies detected by algorithm")
+            plt.plot(x_detected_and_labelled, y_detected_and_labelled, detected_and_labelled_color,
+                     label="Actual anomalies detected by algorithm")
         else:
-            length = len(input_instances_train[0])
-        if length <= 1:
-            plt.plot(dataset_length, input_instances_train, c=colors)
-        else:
-            plt.scatter(dataset_length, input_instances_train, c=colors)
+            # plt.scatter(dataset_length, input_instances, c=colors)
+            df = pd.DataFrame(input_instances)
+            df["is_anomaly"] = data_class
+            parallel_coordinates(df, 'is_anomaly', colormap=plt.get_cmap("Set2"))
 
         ax = figure.axes[0]
         title = file_path + " data with detector: " + detector_name
         ax.set_title(title)
         ax.set_ylabel("values")
+        plt.legend()
         plt.show()

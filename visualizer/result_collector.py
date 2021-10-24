@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 
 from helper.common_methods import read_dictionary_from_file, list_of_all_files_in_folder_and_subfolders
@@ -37,7 +36,7 @@ def get_result_data_as_data_frame():
         dictionary = read_dictionary_from_file(file)
         result_of_file = dictionary[ResultDataKey.data]
         file_path = result_of_file[ResultDataKey.dataset_file_path]
-        detector_name = result_of_file[ResultDataKey.detector_name].split("/")[1]
+        detector_name = result_of_file[ResultDataKey.detector_name]
 
         data = result_of_file[ResultDataKey.data]
         input_instances_train = data[ResultDataKey.input_instances_train]
@@ -46,9 +45,10 @@ def get_result_data_as_data_frame():
         labels_test = data[ResultDataKey.labels_test]
         labels_detected = data[ResultDataKey.labels_detected]
         dataset_name = result_of_file[ResultDataKey.dataset_name]
-        if len(labels_detected) != len(labels_test):
+        if len(labels_detected) != len(labels_test) or len(input_instances_train) != len(labels_train) \
+                or len(input_instances_test) != len(labels_test):
             raise ValueError("labels of dataset and detected labels are not same for file: " +
-                             file_path + " and detector: " + detector_name)
+                             file_path + " and detector: " + detector_name + "or similar issue")
         result_data_frame_row = __convert_to_result_data_frame_row(input_instances_train, input_instances_test,
                                                                    labels_train, labels_test, labels_detected,
                                                                    file_path, detector_name, dataset_name)

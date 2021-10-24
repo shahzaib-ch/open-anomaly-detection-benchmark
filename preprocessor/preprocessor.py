@@ -25,6 +25,10 @@ class PreProcessor:
         input_instances, labels = self.__get_data_from_file()
         input_instances_train, input_instances_test, labels_train, labels_test = \
             train_test_split(input_instances, labels, train_size=self.train_size, shuffle=False)
+        input_instances_train = input_instances_train.to_numpy()
+        input_instances_test = input_instances_test.to_numpy()
+        labels_train = labels_train.to_numpy()
+        labels_test = labels_test.to_numpy()
         return input_instances_train, input_instances_test, labels_train, labels_test
 
     def __clean_data(self, df):
