@@ -16,7 +16,7 @@ def add_f1_score_to_df(result_data_frame):
     """
     Adds accuracy column in data frame of results
     """
-    result_data_frame[ResultDataKey.f1_score] = result_data_frame.apply(lambda row: __calculate_accuracy_score(row),
+    result_data_frame[ResultDataKey.f1_score] = result_data_frame.apply(lambda row: __calculate_f1_score(row),
                                                                         axis=1)
     return result_data_frame
 
