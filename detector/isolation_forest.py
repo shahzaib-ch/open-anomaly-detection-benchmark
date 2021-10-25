@@ -9,7 +9,7 @@ class IsolationForestDetector(BaseDetector, ABC):
     __not_supported_datasets = []
 
     def createInstance(self, features_count, contamination):
-        self.model = IsolationForest(contamination=contamination)
+        self.model = IsolationForest(contamination=contamination, random_state=5)
 
     def train(self, input_instances, labels):
         self.model.fit(input_instances, labels)
