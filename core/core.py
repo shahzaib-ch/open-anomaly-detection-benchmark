@@ -18,7 +18,7 @@ def do_benchmarking(training_dataset_size, do_not_update_existing_result):
     def error_func(exception):
         raise exception
 
-    with Pool(1) as p:
+    with Pool(10) as p:
         p.map_async(run_detector, args, error_callback=error_func)
         p.close()
         p.join()
