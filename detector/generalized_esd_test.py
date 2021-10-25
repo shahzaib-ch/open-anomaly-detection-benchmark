@@ -1,6 +1,7 @@
 from abc import ABC
 
 import numpy as np
+import pandas as pd
 from adtk.detector import GeneralizedESDTestAD
 
 from detector.base_detector import BaseDetector
@@ -14,14 +15,17 @@ class GeneralizedESDTestDetector(BaseDetector, ABC):
         self.model = GeneralizedESDTestAD()
 
     def train(self, input_instances, labels):
+        input_instances = pd.DataFrame(input_instances)
         input_instances = add_date_time_index_to_df(input_instances)
 
         self.model.fit(input_instances)
 
     def predict(self, input_instances):
+        input_instances = pd.DataFrame(input_instances)
         input_instances = add_date_time_index_to_df(input_instances)
         labels = self.model.detect(input_instances)
-        labels = np.where(labels.value, 1, 0)
+        labels = labels.to_numpy().reshape(len(labels))
+        labels = np.where(labels, 1, 0)
         return labels
 
     def notSupportedDatasets(self):
