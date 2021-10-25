@@ -16,8 +16,8 @@ from detector.relative_entropy import RelativeEntropyDetector
 from detector.windowed_gaussian import WindowedGaussianDetector
 
 ALGORITHMS_DICTIONARY = {
-    "Elliptic Envelope": EllipticEnvelopeDetector(),
-    # "Isolation Forest": IsolationForestDetector(),
+    # "Elliptic Envelope": EllipticEnvelopeDetector(),
+    "Isolation Forest": IsolationForestDetector(),
     # "Local Outlier Factor": LocalOutlierFactorDetector(),
     # "Windowed Gaussian": WindowedGaussianDetector(),
     # "Relative Entropy": RelativeEntropyDetector(),

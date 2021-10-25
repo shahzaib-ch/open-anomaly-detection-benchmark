@@ -3,7 +3,6 @@ from abc import ABC
 from sklearn.ensemble import IsolationForest
 
 from detector.base_detector import BaseDetector
-from helper.labels_helper import replace_in_array
 
 
 class IsolationForestDetector(BaseDetector, ABC):
@@ -16,10 +15,9 @@ class IsolationForestDetector(BaseDetector, ABC):
         self.model.fit(input_instances, labels)
 
     def predict(self, input_instances):
-        labels = self.model.predict(input_instances)
-        labels = replace_in_array(labels, 1, 0)
-        labels = replace_in_array(labels, -1, 1)
-        return labels
+        scores = self.model.decision_function(input_instances)
+        scores = 1 - scores
+        return scores
 
     def notSupportedDatasets(self):
         return self.__not_supported_datasets
