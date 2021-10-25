@@ -16,10 +16,10 @@ from detector.relative_entropy import RelativeEntropyDetector
 from detector.windowed_gaussian import WindowedGaussianDetector
 
 ALGORITHMS_DICTIONARY = {
-    # "Elliptic Envelope": EllipticEnvelopeDetector(),
+    "Elliptic Envelope": EllipticEnvelopeDetector(),
     # "Isolation Forest": IsolationForestDetector(),
     # "Local Outlier Factor": LocalOutlierFactorDetector(),
-    "Windowed Gaussian": WindowedGaussianDetector(),
+    # "Windowed Gaussian": WindowedGaussianDetector(),
     # "Relative Entropy": RelativeEntropyDetector(),
     # "Generalized ESD Test": GeneralizedESDTestDetector(),
     # "Principal Component Analysis": PrincipalComponentAnalysisDetector(),
