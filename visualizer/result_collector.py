@@ -36,7 +36,7 @@ def get_result_data_as_data_frame():
         dictionary = read_dictionary_from_file(file)
         result_of_file = dictionary[ResultDataKey.data]
         file_path = result_of_file[ResultDataKey.dataset_file_path]
-        detector_name = result_of_file[ResultDataKey.detector_name].split("/")[1]
+        detector_name = result_of_file[ResultDataKey.detector_name]
 
         data = result_of_file[ResultDataKey.data]
         input_instances_train = data[ResultDataKey.input_instances_train]

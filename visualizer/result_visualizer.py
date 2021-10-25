@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 from matplotlib.image import AxesImage
 from matplotlib.patches import Rectangle
 from matplotlib.text import Text
-from pandas.plotting._matplotlib import parallel_coordinates
+from pandas.plotting import parallel_coordinates
 
 from helper.common_methods import round_xy_coordinates
 from visualizer.heatmap_helper import heatmap, annotate_heatmap
@@ -14,7 +14,7 @@ from visualizer.result_collector import get_result_data_as_data_frame
 from visualizer.result_data_keys import ResultDataKey
 from visualizer.result_metric_calculators import add_accuracy_to_df, add_subfolder_name_to_df, add_f1_score_to_df
 
-matplotlib.use("TkAgg")
+# matplotlib.use("TkAgg")
 
 
 def visualize_dataset_labels(file_path, detector_name, labels, labels_detected):
@@ -276,5 +276,5 @@ class ResultVisualizer:
         title = file_path + " data with detector: " + detector_name
         ax.set_title(title)
         ax.set_ylabel("values")
-        plt.legend()
+        plt.legend(loc='upper right')
         plt.show()
