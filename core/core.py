@@ -72,7 +72,7 @@ def run_detector(args):
         __pre_process_data_set(dataset_file_path, training_dataset_size)
     detected_labels, training_time, test_time = __run_detector_on_data(detector_instance,
                                                                        input_instances_train,
-                                                                       input_instances_test, labels_train)
+                                                                       input_instances_test, labels_train, labels_test)
 
     if len(detected_labels) != len(labels_test) or len(input_instances_train) != len(labels_train) \
             or len(input_instances_test) != len(labels_test):

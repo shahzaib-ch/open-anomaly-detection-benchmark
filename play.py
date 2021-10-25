@@ -1,12 +1,7 @@
-import pickle
+from sklearn.metrics import f1_score
 
-import matplotlib.pyplot as plt
+l = [0, 1, 0]
+l2 = [0.0000, 1.000, 1.000]
 
-with open(
-        'result/Auto Encoder/odd/mnist',
-        'rb') as f:
-    data = pickle.load(f)
-    l = data["data"]["data"]
-    p = l["input_instances_train"]
-    plt.plot(p)
-    plt.show()
+m = f1_score(l, l2)
+print(m)
