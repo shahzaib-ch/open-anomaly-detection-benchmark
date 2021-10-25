@@ -43,14 +43,15 @@ def get_result_data_as_data_frame():
         input_instances_test = data[ResultDataKey.input_instances_test]
         labels_train = data[ResultDataKey.labels_train]
         labels_test = data[ResultDataKey.labels_test]
-        labels_detected = data[ResultDataKey.labels_detected]
+        anomaly_scores_by_algorithm = data[ResultDataKey.anomaly_scores_by_algorithm]
         dataset_name = result_of_file[ResultDataKey.dataset_name]
-        if len(labels_detected) != len(labels_test) or len(input_instances_train) != len(labels_train) \
+        if len(anomaly_scores_by_algorithm) != len(labels_test) or len(input_instances_train) != len(labels_train) \
                 or len(input_instances_test) != len(labels_test):
             raise ValueError("labels of dataset and detected labels are not same for file: " +
                              file_path + " and detector: " + detector_name + "or similar issue")
         result_data_frame_row = __convert_to_result_data_frame_row(input_instances_train, input_instances_test,
-                                                                   labels_train, labels_test, labels_detected,
+                                                                   labels_train, labels_test,
+                                                                   anomaly_scores_by_algorithm,
                                                                    file_path, detector_name, dataset_name)
         result_data_array.append(result_data_frame_row)
     return __make_result_data_frame(result_data_array)
@@ -77,15 +78,15 @@ def visualize(input_instances_train, input_instances_test, labels_train, labels_
 
 
 def __convert_to_result_data_frame_row(input_instances_train, input_instances_test, labels_train, labels_test,
-                                       labels_detected, file_path, detector_name, dataset_name):
+                                       anomaly_scores_by_algorithm, file_path, detector_name, dataset_name):
     return [detector_name, dataset_name, file_path, input_instances_train, input_instances_test,
-            labels_train, labels_test, labels_detected]
+            labels_train, labels_test, anomaly_scores_by_algorithm]
 
 
 def __make_result_data_frame(result_data_array):
     return pd.DataFrame(result_data_array, columns=[ResultDataKey.detector_name, ResultDataKey.dataset_name,
                                                     ResultDataKey.file_path, ResultDataKey.input_instances_train,
                                                     ResultDataKey.input_instances_test, ResultDataKey.labels_train,
-                                                    ResultDataKey.labels_test, ResultDataKey.labels_detected])
+                                                    ResultDataKey.labels_test, ResultDataKey.anomaly_scores_by_algorithm])
 
 # Todo should add FP, TP, FN, FP visualization as well.

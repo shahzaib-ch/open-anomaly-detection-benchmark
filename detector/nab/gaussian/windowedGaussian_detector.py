@@ -82,8 +82,6 @@ class WindowedGaussianDetectorNab(AnomalyDetector):
                 # reset stepBuffer
                 self.stepBuffer = []
                 self._updateWindow()
-
-        anomalyScore = 1 if anomalyScore >= 1.0 else 0
         return (anomalyScore,)
 
     def _updateWindow(self):

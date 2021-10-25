@@ -18,7 +18,7 @@ def do_benchmarking(training_dataset_size, do_not_update_existing_result):
     def error_func(exception):
         raise exception
 
-    with Pool(10) as p:
+    with Pool(1) as p:
         p.map_async(run_detector, args, error_callback=error_func)
         p.close()
         p.join()
@@ -70,18 +70,18 @@ def run_detector(args):
 
     input_instances_train, input_instances_test, labels_train, labels_test = \
         __pre_process_data_set(dataset_file_path, training_dataset_size)
-    detected_labels, training_time, test_time = __run_detector_on_data(detector_instance,
-                                                                       input_instances_train,
-                                                                       input_instances_test, labels_train, labels_test)
+    anomaly_scores_by_algorithm, training_time, test_time = __run_detector_on_data(detector_instance,
+                                                                     input_instances_train,
+                                                                     input_instances_test, labels_train, labels_test)
 
-    if len(detected_labels) != len(labels_test) or len(input_instances_train) != len(labels_train) \
+    if len(anomaly_scores_by_algorithm) != len(labels_test) or len(input_instances_train) != len(labels_train) \
             or len(input_instances_test) != len(labels_test):
         raise ValueError("labels of dataset and detected labels are not same for file: " +
                          dataset_file_path + " and detector: " + detector_name + "or similar issue")
 
     detector_result = __create_result_json(detector_name, dataset_name, dataset_file_path,
                                            input_instances_train, input_instances_test, labels_train,
-                                           labels_test, detected_labels, training_time, test_time)
+                                           labels_test, anomaly_scores_by_algorithm, training_time, test_time)
     __save_detector_result(result_file_path, detector_result)
     print("saved result: ", result_file_path)
 
@@ -117,7 +117,7 @@ def __run_detector_on_data(detector_instance, input_instances_train, input_insta
 
 def __create_result_json(detector_name, dataset_name, dataset_file_path,
                          input_instances_train, input_instances_test, labels_train, labels_test,
-                         detected_labels, training_time, test_time):
+                         anomaly_scores_by_algorithm, training_time, test_time):
     return {
         "data": {
             "dataset_name": dataset_name,
@@ -130,7 +130,7 @@ def __create_result_json(detector_name, dataset_name, dataset_file_path,
                 "input_instances_test": input_instances_test,
                 "labels_train": labels_train,
                 "labels_test": labels_test,
-                "labels_detected": detected_labels
+                "anomaly_scores_by_algorithm": anomaly_scores_by_algorithm
             }
         }
     }
