@@ -1,4 +1,4 @@
-import matplotlib
+import numpy as np
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -12,7 +12,9 @@ from helper.common_methods import round_xy_coordinates
 from visualizer.heatmap_helper import heatmap, annotate_heatmap
 from visualizer.result_collector import get_result_data_as_data_frame
 from visualizer.result_data_keys import ResultDataKey
-from visualizer.result_metric_calculators import add_accuracy_to_df, add_subfolder_name_to_df, add_f1_score_to_df
+from visualizer.result_metric_calculators import add_accuracy_to_df, add_subfolder_name_to_df, add_f1_score_to_df, \
+    add_detected_labels_to_df
+
 
 # matplotlib.use("TkAgg")
 
@@ -41,9 +43,10 @@ def visualize_dataset(file_path, input_instances):
 
 class ResultVisualizer:
 
-    def __init__(self, accuracy_measure):
+    def __init__(self, accuracy_measure, anomaly_threshold):
         self.accuracy_measure = accuracy_measure
         self.result_data_frame = get_result_data_as_data_frame()
+        self.result_data_frame = add_detected_labels_to_df(self.result_data_frame, anomaly_threshold)
         if accuracy_measure == ResultDataKey.accuracy:
             self.result_data_frame = add_accuracy_to_df(self.result_data_frame)
         if accuracy_measure == ResultDataKey.f1_score:

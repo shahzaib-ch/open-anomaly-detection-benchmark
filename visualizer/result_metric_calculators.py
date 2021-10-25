@@ -1,6 +1,16 @@
+import numpy as np
 from sklearn.metrics import accuracy_score, f1_score
 
 from visualizer.result_data_keys import ResultDataKey
+
+
+def add_detected_labels_to_df(result_data_frame, anomaly_threshold):
+    """
+    Adds accuracy column in data frame of results
+    """
+    result_data_frame[ResultDataKey.labels_detected] = result_data_frame.apply(
+        lambda row: __calculate_detected_labels(row, anomaly_threshold), axis=1)
+    return result_data_frame
 
 
 def add_accuracy_to_df(result_data_frame):
@@ -19,6 +29,12 @@ def add_f1_score_to_df(result_data_frame):
     result_data_frame[ResultDataKey.f1_score] = result_data_frame.apply(lambda row: __calculate_f1_score(row),
                                                                         axis=1)
     return result_data_frame
+
+
+def __calculate_detected_labels(row, anomaly_threshold):
+    scores = row[ResultDataKey.anomaly_scores_by_algorithm]
+    detected_labels = np.where(scores >= anomaly_threshold, 1, 0)
+    return detected_labels
 
 
 def __calculate_f1_score(row):

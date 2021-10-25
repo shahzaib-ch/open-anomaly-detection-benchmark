@@ -5,6 +5,7 @@ class ResultDataKey:
     labels_train = "labels_train"
     labels_test = "labels_test"
     labels_detected = "labels_detected"
+    anomaly_scores_by_algorithm = "anomaly_scores_by_algorithm"
     dataset_name = "dataset_name"
     detector_name = "detector_name"
     file_path = "file_path"
