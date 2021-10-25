@@ -18,12 +18,10 @@ from detector.windowed_gaussian import WindowedGaussianDetector
 ALGORITHMS_DICTIONARY = {
     # "Elliptic Envelope": EllipticEnvelopeDetector(),
     # "Isolation Forest": IsolationForestDetector(),
-    "Local Outlier Factor": LocalOutlierFactorDetector(),
+    # "Local Outlier Factor": LocalOutlierFactorDetector(),
     # "Windowed Gaussian": WindowedGaussianDetector(),
     # "Relative Entropy": RelativeEntropyDetector(),
-    # "Generalized ESD Test": GeneralizedESDTestDetector(),
-    # "Principal Component Analysis": PrincipalComponentAnalysisDetector(),
-    # "One-class SVM": OneClassSupportVectorMachineDetector(),
+    "One-class SVM": OneClassSupportVectorMachineDetector(),
     # "Angle-based Outlier Detector": AngleBasedOutlierDetector(),
     # "kNN": KNearestNeighborsDetector(),
     # "Clustering Based Local Outlier Factor": ClusteringBasedLocalOutlierFactorDetector(),
@@ -33,3 +31,10 @@ ALGORITHMS_DICTIONARY = {
     # "Contextual Anomaly Detector": ContextualAnomalyDetector(),
     # "Bayes Change Point": BayesChangePointDetector(),
 }
+
+"""
+Algorithms with no anomaly score method, just true or false
+"Generalized ESD Test": GeneralizedESDTestDetector(),
+    "Principal Component Analysis": PrincipalComponentAnalysisDetector(),
+
+"""
