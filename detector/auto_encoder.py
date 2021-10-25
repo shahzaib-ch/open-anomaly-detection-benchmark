@@ -8,7 +8,7 @@ from detector.base_detector import BaseDetector
 class AutoEncoderDetector(BaseDetector, ABC):
     __not_supported_datasets = []
 
-    def createInstance(self, features_count):
+    def createInstance(self, features_count, contamination):
         hidden_neurons = [1, 1]
         if features_count > 1:
             hidden_neurons = [features_count * 2/3, features_count, features_count, features_count * 2/3]

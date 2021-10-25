@@ -9,8 +9,8 @@ from helper.labels_helper import replace_in_array
 class EllipticEnvelopeDetector(BaseDetector, ABC):
     __not_supported_datasets = ['data/datasets/nab/artificialNoAnomaly/art_flatline.csv']
 
-    def createInstance(self, features_count):
-        self.model = EllipticEnvelope(support_fraction=1)
+    def createInstance(self, features_count, contamination):
+        self.model = EllipticEnvelope(support_fraction=1, contamination=contamination)
 
     def train(self, input_instances, labels):
         self.model.fit(input_instances, labels)

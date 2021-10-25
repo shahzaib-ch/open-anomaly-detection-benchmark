@@ -11,7 +11,7 @@ class ClusteringBasedLocalOutlierFactorDetector(BaseDetector, ABC):
                                 "data/datasets/nab/artificialNoAnomaly/art_flatline.csv",
                                 "data/datasets/yahoo/A4Benchmark/A4Benchmark-TS42.csv"]
 
-    def createInstance(self, features_count):
+    def createInstance(self, features_count, contamination):
         self.model = CBLOF()
 
     def train(self, input_instances, labels):

@@ -8,8 +8,8 @@ from detector.base_detector import BaseDetector
 class KNearestNeighborsDetector(BaseDetector, ABC):
     __not_supported_datasets = []
 
-    def createInstance(self, features_count):
-        self.model = KNN()
+    def createInstance(self, features_count, contamination):
+        self.model = KNN(contamination=contamination)
 
     def train(self, input_instances, labels):
         self.model.fit(input_instances)
