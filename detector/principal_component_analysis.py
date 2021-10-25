@@ -10,7 +10,7 @@ from helper.common_methods import add_date_time_index_to_df
 class PrincipalComponentAnalysisDetector(BaseDetector, ABC):
     __not_supported_datasets = ["odd"]
 
-    def createInstance(self, features_count):
+    def createInstance(self, features_count, contamination):
         self.model = PcaAD()
 
     def train(self, input_instances, labels):

@@ -5,7 +5,7 @@ class BaseDetector(ABC):
     model = None
 
     @abstractmethod
-    def createInstance(self, features_count):
+    def createInstance(self, features_count, contamination):
         """
         Creates mode and assigned to model variable
         """

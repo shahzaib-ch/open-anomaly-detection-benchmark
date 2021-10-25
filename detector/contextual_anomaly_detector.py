@@ -11,7 +11,7 @@ class ContextualAnomalyDetector(BaseDetector, ABC):
     __input_instances_train = []
     __probationary_period = 0
 
-    def createInstance(self, features_count):
+    def createInstance(self, features_count, contamination):
         """
         we will create instance in predict method due to NAB implementation
         """

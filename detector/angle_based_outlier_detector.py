@@ -10,8 +10,8 @@ from helper.common_methods import convert_data_frame_to_float
 class AngleBasedOutlierDetector(BaseDetector, ABC):
     __not_supported_datasets = []
 
-    def createInstance(self, features_count):
-        self.model = ABOD()
+    def createInstance(self, features_count, contamination):
+        self.model = ABOD(contamination=contamination)
 
     def train(self, input_instances, labels):
         if isinstance(input_instances, pd.DataFrame):

@@ -2,6 +2,8 @@ import os
 import time
 from multiprocessing import Pool
 
+import numpy as np
+
 from data.dataset_collector import DatasetCollector
 from detector.detector_aggregator import ALGORITHMS_DICTIONARY
 from helper.common_methods import save_dictionary_to_file, list_contains
@@ -86,7 +88,7 @@ def run_detector(args):
     return True
 
 
-def __run_detector_on_data(detector_instance, input_instances_train, input_instances_test, labels_train):
+def __run_detector_on_data(detector_instance, input_instances_train, input_instances_test, labels_train, labels_test):
     """
     Returns list of detected anomalies, 0=normal and 1=anomaly
     :param detector_instance:
@@ -96,7 +98,9 @@ def __run_detector_on_data(detector_instance, input_instances_train, input_insta
     """
     # creating model
     features_count = input_instances_train[0].size
-    detector_instance.createInstance(features_count)
+    labels = np.concatenate((labels_train, labels_test))
+    contamination = np.count_nonzero(labels) / len(labels)
+    detector_instance.createInstance(features_count, contamination)
 
     start_time = time.monotonic()
     # training model

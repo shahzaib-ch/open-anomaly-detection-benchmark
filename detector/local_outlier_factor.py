@@ -9,8 +9,8 @@ from helper.labels_helper import replace_in_array
 class LocalOutlierFactorDetector(BaseDetector, ABC):
     __not_supported_datasets = []
 
-    def createInstance(self, features_count):
-        self.model = LocalOutlierFactor(novelty=True)
+    def createInstance(self, features_count, contamination):
+        self.model = LocalOutlierFactor(contamination=contamination)
 
     def train(self, input_instances, labels):
         self.model.fit(input_instances, labels)
