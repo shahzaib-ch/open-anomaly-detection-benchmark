@@ -64,5 +64,4 @@ class ExposeDetectorNab(AnomalyDetector):
         anomalyScore = (anomalyScore + 0.02) / 1.04
         self.timestep += 1
 
-        threshold = 1.0
-        return [1 if anomalyScore >= threshold else 0]
+        return [anomalyScore]

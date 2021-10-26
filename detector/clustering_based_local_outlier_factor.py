@@ -12,7 +12,7 @@ class ClusteringBasedLocalOutlierFactorDetector(BaseDetector, ABC):
                                 "data/datasets/yahoo/A4Benchmark/A4Benchmark-TS42.csv"]
 
     def createInstance(self, features_count, contamination):
-        self.model = CBLOF()
+        self.model = CBLOF(contamination=contamination)
 
     def train(self, input_instances, labels):
         self.model.fit(input_instances)

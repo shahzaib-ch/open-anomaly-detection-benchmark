@@ -35,8 +35,6 @@ class ContextOSEDetectorNab(AnomalyDetector):
 
     def handleRecord(self, inputData):
         anomalyScore = self.cadose.getAnomalyScore(inputData[0])
-        threshold = 0.77
-        anomalyScore = 1 if anomalyScore >= threshold else 0
         return (anomalyScore,)
 
     def initialize(self):
