@@ -7,7 +7,7 @@ from detector.nab.knncad.knncad_detector import KnncadDetectorNab
 
 
 class KnncadDetector(BaseDetector, ABC):
-    __not_supported_datasets = ["odd"]
+    __not_supported_datasets = ["odd", "ucr", "yahoo"]
     __input_instances_train = []
     __probationary_period = 0
 
@@ -24,9 +24,9 @@ class KnncadDetector(BaseDetector, ABC):
         input_instances = np.concatenate((self.__input_instances_train, input_instances))
         self.model = KnncadDetectorNab(input_instances, self.__probationary_period)
         self.model.initialize()
-        labels = self.model.run()
-        labels = labels[self.__input_instances_train.size:]
-        return np.asarray(labels)
+        scores = self.model.run()
+        scores = scores[self.__input_instances_train.size:]
+        return np.asarray(scores)
 
     def notSupportedDatasets(self):
         return self.__not_supported_datasets

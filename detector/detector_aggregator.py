@@ -26,7 +26,7 @@ ALGORITHMS_DICTIONARY = {
     # "kNN": KNearestNeighborsDetector(),
     # "Clustering Based Local Outlier Factor": ClusteringBasedLocalOutlierFactorDetector(),
     # "Auto Encoder": AutoEncoderDetector(),
-    # "KNN CAD": KnncadDetector(),
+    "KNN CAD": KnncadDetector(),
     # "Expose": ExposeDetector(),
     # "Contextual Anomaly Detector": ContextualAnomalyDetector(),
     # "Bayes Change Point": BayesChangePointDetector(),
