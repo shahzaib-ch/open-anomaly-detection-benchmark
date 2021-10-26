@@ -21,7 +21,7 @@ ALGORITHMS_DICTIONARY = {
     # "Local Outlier Factor": LocalOutlierFactorDetector(),
     # "Windowed Gaussian": WindowedGaussianDetector(),
     # "Relative Entropy": RelativeEntropyDetector(),
-    "One-class SVM": OneClassSupportVectorMachineDetector(),
+    # "One-class SVM": OneClassSupportVectorMachineDetector(),
     # "Angle-based Outlier Detector": AngleBasedOutlierDetector(),
     # "kNN": KNearestNeighborsDetector(),
     # "Clustering Based Local Outlier Factor": ClusteringBasedLocalOutlierFactorDetector(),
