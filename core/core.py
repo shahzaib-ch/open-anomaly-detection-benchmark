@@ -71,8 +71,9 @@ def run_detector(args):
     input_instances_train, input_instances_test, labels_train, labels_test = \
         __pre_process_data_set(dataset_file_path, training_dataset_size)
     anomaly_scores_by_algorithm, training_time, test_time = __run_detector_on_data(detector_instance,
-                                                                     input_instances_train,
-                                                                     input_instances_test, labels_train, labels_test)
+                                                                                   input_instances_train,
+                                                                                   input_instances_test, labels_train,
+                                                                                   labels_test)
 
     if len(anomaly_scores_by_algorithm) != len(labels_test) or len(input_instances_train) != len(labels_train) \
             or len(input_instances_test) != len(labels_test):
@@ -100,6 +101,11 @@ def __run_detector_on_data(detector_instance, input_instances_train, input_insta
     features_count = input_instances_train[0].size
     labels = np.concatenate((labels_train, labels_test))
     contamination = np.count_nonzero(labels) / len(labels)
+    if contamination <= 0:
+        contamination = 0.01
+    if contamination >= 0.5:
+        contamination = 0.49
+
     detector_instance.createInstance(features_count, contamination)
 
     start_time = time.monotonic()
