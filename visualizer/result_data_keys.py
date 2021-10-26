@@ -15,3 +15,4 @@ class ResultDataKey:
     training_time = "training_time"
     test_time = "test_time"
     f1_score = "F1 score"
+    average_precision_score = "Average precision score"

@@ -1,6 +1,7 @@
 from abc import ABC
 
 from sklearn.neighbors import LocalOutlierFactor
+from sklearn.preprocessing import normalize
 
 from detector.base_detector import BaseDetector
 from helper.labels_helper import replace_in_array
@@ -17,7 +18,8 @@ class LocalOutlierFactorDetector(BaseDetector, ABC):
 
     def predict(self, input_instances):
         scores = self.model.decision_function(input_instances)
-        scores = 1 - scores
+        scores = normalize(scores.reshape(1, -1))[0]
+        scores = 1 + scores
         return scores
 
     def notSupportedDatasets(self):
