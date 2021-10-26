@@ -1,6 +1,7 @@
 from abc import ABC
 
 from sklearn.ensemble import IsolationForest
+from sklearn.preprocessing import normalize
 
 from detector.base_detector import BaseDetector
 
@@ -16,7 +17,8 @@ class IsolationForestDetector(BaseDetector, ABC):
 
     def predict(self, input_instances):
         scores = self.model.decision_function(input_instances)
-        scores = 1 - scores
+        scores = normalize(scores.reshape(1, -1))[0]
+        scores = 1 + scores
         return scores
 
     def notSupportedDatasets(self):

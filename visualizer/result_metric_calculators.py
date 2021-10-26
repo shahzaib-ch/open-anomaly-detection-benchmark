@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn.metrics import accuracy_score, f1_score
+from sklearn.metrics import accuracy_score, f1_score, average_precision_score
 
 from visualizer.result_data_keys import ResultDataKey
 
@@ -29,6 +29,23 @@ def add_f1_score_to_df(result_data_frame):
     result_data_frame[ResultDataKey.f1_score] = result_data_frame.apply(lambda row: __calculate_f1_score(row),
                                                                         axis=1)
     return result_data_frame
+
+
+def add_precision_score_to_df(result_data_frame):
+    """
+    Adds accuracy column in data frame of results
+    """
+    result_data_frame[ResultDataKey.average_precision_score] = result_data_frame.apply(
+        lambda row: __calculate_precision_score_labels(row),
+        axis=1)
+    return result_data_frame
+
+
+def __calculate_precision_score_labels(row):
+    scores = row[ResultDataKey.anomaly_scores_by_algorithm]
+    labels = row[ResultDataKey.labels_test]
+    precision = average_precision_score(labels, scores)
+    return precision
 
 
 def __calculate_detected_labels(row, anomaly_threshold):

@@ -18,7 +18,7 @@ from detector.windowed_gaussian import WindowedGaussianDetector
 ALGORITHMS_DICTIONARY = {
     # "Elliptic Envelope": EllipticEnvelopeDetector(),
     # "Isolation Forest": IsolationForestDetector(),
-    # "Local Outlier Factor": LocalOutlierFactorDetector(),
+    "Local Outlier Factor": LocalOutlierFactorDetector(),
     # "Windowed Gaussian": WindowedGaussianDetector(),
     # "Relative Entropy": RelativeEntropyDetector(),
     # "One-class SVM": OneClassSupportVectorMachineDetector(),
@@ -26,7 +26,7 @@ ALGORITHMS_DICTIONARY = {
     # "kNN": KNearestNeighborsDetector(),
     # "Clustering Based Local Outlier Factor": ClusteringBasedLocalOutlierFactorDetector(),
     # "Auto Encoder": AutoEncoderDetector(),
-    "KNN CAD": KnncadDetector(),
+    # "KNN CAD": KnncadDetector(),
     # "Expose": ExposeDetector(),
     # "Contextual Anomaly Detector": ContextualAnomalyDetector(),
     # "Bayes Change Point": BayesChangePointDetector(),
