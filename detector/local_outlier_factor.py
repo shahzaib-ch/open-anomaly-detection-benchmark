@@ -1,11 +1,9 @@
 from abc import ABC
 
 from sklearn.neighbors import LocalOutlierFactor
-from sklearn.preprocessing import normalize
 
 from detector.base_detector import BaseDetector
 from helper.common_methods import standardize_data
-from helper.labels_helper import replace_in_array
 
 
 class LocalOutlierFactorDetector(BaseDetector, ABC):

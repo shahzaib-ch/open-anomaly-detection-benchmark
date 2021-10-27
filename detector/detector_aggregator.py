@@ -16,12 +16,12 @@ from detector.relative_entropy import RelativeEntropyDetector
 from detector.windowed_gaussian import WindowedGaussianDetector
 
 ALGORITHMS_DICTIONARY = {
-    "Elliptic Envelope": EllipticEnvelopeDetector(),
-    "Isolation Forest": IsolationForestDetector(),
-    "Local Outlier Factor": LocalOutlierFactorDetector(),
+    # "Elliptic Envelope": EllipticEnvelopeDetector(),
+    # "Isolation Forest": IsolationForestDetector(),
+    # "Local Outlier Factor": LocalOutlierFactorDetector(),
     # "Windowed Gaussian": WindowedGaussianDetector(),
     # "Relative Entropy": RelativeEntropyDetector(),
-    # "One-class SVM": OneClassSupportVectorMachineDetector(),
+    "One-class SVM": OneClassSupportVectorMachineDetector(),
     # "Angle-based Outlier Detector": AngleBasedOutlierDetector(),
     # "kNN": KNearestNeighborsDetector(),
     # "Clustering Based Local Outlier Factor": ClusteringBasedLocalOutlierFactorDetector(),
