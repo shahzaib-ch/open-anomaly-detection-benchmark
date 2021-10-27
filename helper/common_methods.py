@@ -77,3 +77,11 @@ def standardize_data(data):
     reshaped_data = data.reshape(-1, 1)
     scalar.fit(reshaped_data)
     return scalar.transform(reshaped_data).reshape(1, -1)[0]
+
+
+def get_2nd_value_from_list(scores_list):
+    anomaly_scores = []
+    for i in range(len(scores_list)):
+        anomaly_scores.append(scores_list[i, 1])
+
+    return np.asarray(anomaly_scores)
