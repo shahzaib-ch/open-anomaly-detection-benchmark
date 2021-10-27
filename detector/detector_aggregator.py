@@ -17,8 +17,8 @@ from detector.windowed_gaussian import WindowedGaussianDetector
 
 ALGORITHMS_DICTIONARY = {
     # "Elliptic Envelope": EllipticEnvelopeDetector(),
-    # "Isolation Forest": IsolationForestDetector(),
-    "Local Outlier Factor": LocalOutlierFactorDetector(),
+    "Isolation Forest": IsolationForestDetector(),
+    # "Local Outlier Factor": LocalOutlierFactorDetector(),
     # "Windowed Gaussian": WindowedGaussianDetector(),
     # "Relative Entropy": RelativeEntropyDetector(),
     # "One-class SVM": OneClassSupportVectorMachineDetector(),
