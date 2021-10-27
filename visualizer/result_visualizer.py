@@ -1,4 +1,4 @@
-import numpy as np
+import matplotlib
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -16,7 +16,7 @@ from visualizer.result_metric_calculators import add_accuracy_to_df, add_subfold
     add_detected_labels_to_df, add_precision_score_to_df
 
 
-# matplotlib.use("TkAgg")
+matplotlib.use("TkAgg")
 
 
 def visualize_dataset_labels(file_path, detector_name, labels, labels_detected):
