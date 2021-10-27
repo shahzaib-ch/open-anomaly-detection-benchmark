@@ -3,6 +3,7 @@ from abc import ABC
 from pyod.models.auto_encoder import AutoEncoder
 
 from detector.base_detector import BaseDetector
+from helper.common_methods import get_2nd_value_from_list
 
 
 class AutoEncoderDetector(BaseDetector, ABC):
@@ -18,7 +19,8 @@ class AutoEncoderDetector(BaseDetector, ABC):
         self.model.fit(input_instances)
 
     def predict(self, input_instances):
-        scores = self.model.decision_function(input_instances)
+        scores = self.model.predict_proba(input_instances)
+        scores = get_2nd_value_from_list(scores)
         return scores
 
     def notSupportedDatasets(self):

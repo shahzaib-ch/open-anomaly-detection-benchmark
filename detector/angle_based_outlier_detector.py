@@ -4,7 +4,7 @@ import pandas as pd
 from pyod.models.abod import ABOD
 
 from detector.base_detector import BaseDetector
-from helper.common_methods import convert_data_frame_to_float
+from helper.common_methods import convert_data_frame_to_float, get_2nd_value_from_list
 
 
 class AngleBasedOutlierDetector(BaseDetector, ABC):
@@ -19,7 +19,8 @@ class AngleBasedOutlierDetector(BaseDetector, ABC):
         self.model.fit(input_instances)
 
     def predict(self, input_instances):
-        scores = self.model.decision_function(input_instances)
+        scores = self.model.predict_proba(input_instances)
+        scores = get_2nd_value_from_list(scores)
         return scores
 
     def notSupportedDatasets(self):
