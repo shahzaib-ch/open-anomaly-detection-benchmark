@@ -16,9 +16,8 @@ class IsolationForestDetector(BaseDetector, ABC):
         self.model.fit(input_instances, labels)
 
     def predict(self, input_instances):
-        scores = self.model.decision_function(input_instances)
-        scores = normalize(scores.reshape(1, -1))[0]
-        scores = 1 + scores
+        scores = self.model.score_samples(input_instances)
+        scores = abs(scores)
         return scores
 
     def notSupportedDatasets(self):
