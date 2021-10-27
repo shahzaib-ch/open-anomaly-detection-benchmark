@@ -23,13 +23,13 @@ ALGORITHMS_DICTIONARY = {
     # "Relative Entropy": RelativeEntropyDetector(),
     # "One-class SVM": OneClassSupportVectorMachineDetector(),
     # "Angle-based Outlier Detector": AngleBasedOutlierDetector(),
-    # "kNN": KNearestNeighborsDetector(),
-    # "Clustering Based Local Outlier Factor": ClusteringBasedLocalOutlierFactorDetector(),
-    # "Auto Encoder": AutoEncoderDetector(),
-    # "KNN CAD": KnncadDetector(),
-    "Expose": ExposeDetector(),
-    "Contextual Anomaly Detector": ContextualAnomalyDetector(),
-    "Bayes Change Point": BayesChangePointDetector(),
+    "kNN": KNearestNeighborsDetector(),
+    "Clustering Based Local Outlier Factor": ClusteringBasedLocalOutlierFactorDetector(),
+    "Auto Encoder": AutoEncoderDetector(),
+    "KNN CAD": KnncadDetector(),
+    # "Expose": ExposeDetector(),
+    # "Contextual Anomaly Detector": ContextualAnomalyDetector(),
+    # "Bayes Change Point": BayesChangePointDetector(),
 }
 
 """
