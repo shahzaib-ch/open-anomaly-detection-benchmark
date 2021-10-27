@@ -29,7 +29,7 @@ ALGORITHMS_DICTIONARY = {
     # "KNN CAD": KnncadDetector(),
     # "Expose": ExposeDetector(),
     # "Contextual Anomaly Detector": ContextualAnomalyDetector(),
-    # "Bayes Change Point": BayesChangePointDetector(),
+    "Bayes Change Point": BayesChangePointDetector(),
 }
 
 """
