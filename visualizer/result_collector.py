@@ -43,7 +43,12 @@ def get_result_data_as_data_frame():
         input_instances_test = data[ResultDataKey.input_instances_test]
         labels_train = data[ResultDataKey.labels_train]
         labels_test = data[ResultDataKey.labels_test]
-        anomaly_scores_by_algorithm = data[ResultDataKey.anomaly_scores_by_algorithm]
+        if ResultDataKey.anomaly_scores_by_algorithm in data:
+            anomaly_scores_by_algorithm = data[ResultDataKey.anomaly_scores_by_algorithm]
+        else:
+            # "Result data is from v4 version"
+            anomaly_scores_by_algorithm = data[ResultDataKey.labels_detected]
+
         dataset_name = result_of_file[ResultDataKey.dataset_name]
         if len(anomaly_scores_by_algorithm) != len(labels_test) or len(input_instances_train) != len(labels_train) \
                 or len(input_instances_test) != len(labels_test):
@@ -87,6 +92,7 @@ def __make_result_data_frame(result_data_array):
     return pd.DataFrame(result_data_array, columns=[ResultDataKey.detector_name, ResultDataKey.dataset_name,
                                                     ResultDataKey.file_path, ResultDataKey.input_instances_train,
                                                     ResultDataKey.input_instances_test, ResultDataKey.labels_train,
-                                                    ResultDataKey.labels_test, ResultDataKey.anomaly_scores_by_algorithm])
+                                                    ResultDataKey.labels_test,
+                                                    ResultDataKey.anomaly_scores_by_algorithm])
 
 # Todo should add FP, TP, FN, FP visualization as well.
