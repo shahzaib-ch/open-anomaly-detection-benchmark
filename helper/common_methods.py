@@ -1,7 +1,9 @@
 import os
 import pickle
 
+import numpy as np
 import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
 
 
 def read_dictionary_from_file(file_path):
@@ -65,3 +67,13 @@ def convert_data_frame_to_float(df):
         df[column_name] = pd.to_numeric(df[column_name], downcast='float')
 
     return df
+
+
+def standardize_data(data):
+    """
+    between 0 and 1
+    """
+    scalar = MinMaxScaler()
+    reshaped_data = data.reshape(-1, 1)
+    scalar.fit(reshaped_data)
+    return scalar.transform(reshaped_data).reshape(1, -1)[0]
