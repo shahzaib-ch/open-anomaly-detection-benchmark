@@ -43,11 +43,11 @@ def visualize_dataset(file_path, input_instances):
 
 class AccuracyResultVisualizer:
 
-    def __init__(self, accuracy_measure, anomaly_threshold):
+    def __init__(self, accuracy_measure, anomaly_threshold, use_windows):
         self.accuracy_measure = accuracy_measure
         self.result_data_frame = get_result_data_as_data_frame()
         self.result_data_frame.dropna()
-        self.result_data_frame = add_detected_labels_to_df(self.result_data_frame, anomaly_threshold)
+        self.result_data_frame = add_detected_labels_to_df(self.result_data_frame, anomaly_threshold, use_windows)
 
         if accuracy_measure == ResultDataKey.accuracy:
             self.result_data_frame = add_accuracy_to_df(self.result_data_frame)

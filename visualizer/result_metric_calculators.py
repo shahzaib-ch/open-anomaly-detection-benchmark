@@ -1,21 +1,25 @@
 import numpy as np
 from sklearn.metrics import accuracy_score, f1_score, average_precision_score, precision_score, recall_score
 
+from helper.ResultWindowLabeler import ResultWindowLabeler
 from visualizer.result_data_keys import ResultDataKey
 
 
-def add_detected_labels_to_df(result_data_frame, anomaly_threshold):
+def add_detected_labels_to_df(result_data_frame, anomaly_threshold, use_windows):
     """
     Adds accuracy column in data frame of results
     """
     result_data_frame[ResultDataKey.labels_detected] = result_data_frame.apply(
-        lambda row: __calculate_detected_labels(row, anomaly_threshold), axis=1)
+        lambda row: __calculate_detected_labels(row, anomaly_threshold, use_windows), axis=1)
     return result_data_frame
 
 
-def __calculate_detected_labels(row, anomaly_threshold):
+def __calculate_detected_labels(row, anomaly_threshold, use_windows):
     scores = row[ResultDataKey.anomaly_scores_by_algorithm]
     detected_labels = np.where(scores >= anomaly_threshold, 1, 0)
+    if use_windows:
+        labeler = ResultWindowLabeler(row[ResultDataKey.labels_test], detected_labels)
+        return labeler.mark_whole_window_if_any_point_detected()
     return detected_labels
 
 
