@@ -31,7 +31,7 @@ def add_accuracy_to_df(result_data_frame):
 def __calculate_accuracy_score(row):
     labels = row[ResultDataKey.labels_test]
     labels_detected = row[ResultDataKey.labels_detected]
-    return accuracy_score(labels, labels_detected)
+    return accuracy_score(labels, labels_detected) * 100
 
 
 def add_f1_score_to_df(result_data_frame):
@@ -46,7 +46,7 @@ def add_f1_score_to_df(result_data_frame):
 def __calculate_f1_score(row):
     labels = row[ResultDataKey.labels_test]
     labels_detected = row[ResultDataKey.labels_detected]
-    return f1_score(labels, labels_detected, zero_division=1)
+    return f1_score(labels, labels_detected, zero_division=1) * 100
 
 
 def add_average_precision_score_to_df(result_data_frame):
@@ -62,7 +62,7 @@ def add_average_precision_score_to_df(result_data_frame):
 def __calculate_average_precision_score_labels(row):
     scores = row[ResultDataKey.labels_detected]
     labels = row[ResultDataKey.labels_test]
-    precision = average_precision_score(labels, scores, zero_division=1)
+    precision = average_precision_score(labels, scores) * 100
     return precision
 
 
@@ -79,7 +79,7 @@ def add_recall_score_to_df(result_data_frame):
 def __calculate_recall_score_labels(row):
     scores = row[ResultDataKey.labels_detected]
     labels = row[ResultDataKey.labels_test]
-    precision = recall_score(labels, scores, zero_division=1)
+    precision = recall_score(labels, scores, zero_division=1) * 100
     return precision
 
 
@@ -96,7 +96,7 @@ def add_precision_score_to_df(result_data_frame):
 def __calculate_precision_score_labels(row):
     scores = row[ResultDataKey.labels_detected]
     labels = row[ResultDataKey.labels_test]
-    precision = precision_score(labels, scores, zero_division=1)
+    precision = precision_score(labels, scores, zero_division=1) * 100
     return precision
 
 
