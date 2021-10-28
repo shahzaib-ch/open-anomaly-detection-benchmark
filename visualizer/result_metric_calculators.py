@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn.metrics import accuracy_score, f1_score, average_precision_score
+from sklearn.metrics import accuracy_score, f1_score, average_precision_score, precision_score, recall_score
 
 from visualizer.result_data_keys import ResultDataKey
 
@@ -13,6 +13,12 @@ def add_detected_labels_to_df(result_data_frame, anomaly_threshold):
     return result_data_frame
 
 
+def __calculate_detected_labels(row, anomaly_threshold):
+    scores = row[ResultDataKey.anomaly_scores_by_algorithm]
+    detected_labels = np.where(scores >= anomaly_threshold, 1, 0)
+    return detected_labels
+
+
 def add_accuracy_to_df(result_data_frame):
     """
     Adds accuracy column in data frame of results
@@ -20,6 +26,12 @@ def add_accuracy_to_df(result_data_frame):
     result_data_frame[ResultDataKey.accuracy] = result_data_frame.apply(lambda row: __calculate_accuracy_score(row),
                                                                         axis=1)
     return result_data_frame
+
+
+def __calculate_accuracy_score(row):
+    labels = row[ResultDataKey.labels_test]
+    labels_detected = row[ResultDataKey.labels_detected]
+    return accuracy_score(labels, labels_detected)
 
 
 def add_f1_score_to_df(result_data_frame):
@@ -31,39 +43,61 @@ def add_f1_score_to_df(result_data_frame):
     return result_data_frame
 
 
-def add_precision_score_to_df(result_data_frame):
+def __calculate_f1_score(row):
+    labels = row[ResultDataKey.labels_test]
+    labels_detected = row[ResultDataKey.labels_detected]
+    return f1_score(labels, labels_detected, zero_division=1)
+
+
+def add_average_precision_score_to_df(result_data_frame):
     """
     Adds accuracy column in data frame of results
     """
     result_data_frame[ResultDataKey.average_precision_score] = result_data_frame.apply(
+        lambda row: __calculate_average_precision_score_labels(row),
+        axis=1)
+    return result_data_frame
+
+
+def __calculate_average_precision_score_labels(row):
+    scores = row[ResultDataKey.labels_detected]
+    labels = row[ResultDataKey.labels_test]
+    precision = average_precision_score(labels, scores, zero_division=1)
+    return precision
+
+
+def add_recall_score_to_df(result_data_frame):
+    """
+    Adds accuracy column in data frame of results
+    """
+    result_data_frame[ResultDataKey.recall] = result_data_frame.apply(
+        lambda row: __calculate_recall_score_labels(row),
+        axis=1)
+    return result_data_frame
+
+
+def __calculate_recall_score_labels(row):
+    scores = row[ResultDataKey.labels_detected]
+    labels = row[ResultDataKey.labels_test]
+    precision = recall_score(labels, scores, zero_division=1)
+    return precision
+
+
+def add_precision_score_to_df(result_data_frame):
+    """
+    Adds accuracy column in data frame of results
+    """
+    result_data_frame[ResultDataKey.precision] = result_data_frame.apply(
         lambda row: __calculate_precision_score_labels(row),
         axis=1)
     return result_data_frame
 
 
 def __calculate_precision_score_labels(row):
-    scores = row[ResultDataKey.anomaly_scores_by_algorithm]
+    scores = row[ResultDataKey.labels_detected]
     labels = row[ResultDataKey.labels_test]
-    precision = average_precision_score(labels, scores)
+    precision = precision_score(labels, scores, zero_division=1)
     return precision
-
-
-def __calculate_detected_labels(row, anomaly_threshold):
-    scores = row[ResultDataKey.anomaly_scores_by_algorithm]
-    detected_labels = np.where(scores >= anomaly_threshold, 1, 0)
-    return detected_labels
-
-
-def __calculate_f1_score(row):
-    labels = row[ResultDataKey.labels_test]
-    labels_detected = row[ResultDataKey.labels_detected]
-    return f1_score(labels, labels_detected)
-
-
-def __calculate_accuracy_score(row):
-    labels = row[ResultDataKey.labels_test]
-    labels_detected = row[ResultDataKey.labels_detected]
-    return accuracy_score(labels, labels_detected)
 
 
 def add_subfolder_name_to_df(result_data_frame):
