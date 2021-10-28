@@ -1,8 +1,7 @@
-import numpy as np
-from sklearn.preprocessing import MinMaxScaler
+from helper.ResultWindowLabeler import ResultWindowLabeler
 
-scalar = MinMaxScaler()
-l = np.asarray([-4.783, -5.983743, 0, -0.73483, -2.98374, 2, 3, 5, 4.6]).reshape(-1, 1)
-scalar.fit(l)
-m = scalar.transform(l)
-print(m)
+a = [1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+d = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0]
+labeler = ResultWindowLabeler(a, d)
+result = labeler.mark_whole_window_if_any_point_detected()
+print(result)
