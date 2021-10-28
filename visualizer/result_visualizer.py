@@ -45,10 +45,14 @@ class AccuracyResultVisualizer:
 
     def __init__(self, accuracy_measure, anomaly_threshold, use_windows):
         self.accuracy_measure = accuracy_measure
+        print("Creating data frame...")
         self.result_data_frame = get_result_data_as_data_frame()
         self.result_data_frame.dropna()
+        print("Adding detected labels...")
         self.result_data_frame = add_detected_labels_to_df(self.result_data_frame, anomaly_threshold, use_windows)
+        print("Done adding labels")
 
+        print("Calculating accuracy...")
         if accuracy_measure == ResultDataKey.accuracy:
             self.result_data_frame = add_accuracy_to_df(self.result_data_frame)
         elif accuracy_measure == ResultDataKey.f1_score:
@@ -60,6 +64,7 @@ class AccuracyResultVisualizer:
         elif accuracy_measure == ResultDataKey.recall:
             self.result_data_frame = add_recall_score_to_df(self.result_data_frame)
         self.result_data_frame.dropna()
+        print("Getting sub folder names...")
         self.result_data_frame = add_subfolder_name_to_df(self.result_data_frame)
 
     def show_full_detailed_result_heat_map(self):
