@@ -36,6 +36,7 @@ def add_accuracy_to_df(result_data_frame):
 
 
 def __calculate_accuracy_score(row):
+    print("........")
     labels = row[ResultDataKey.labels_test]
     labels_detected = row[ResultDataKey.labels_detected]
     return accuracy_score(labels, labels_detected) * 100
@@ -51,6 +52,7 @@ def add_f1_score_to_df(result_data_frame):
 
 
 def __calculate_f1_score(row):
+    print("........")
     labels = row[ResultDataKey.labels_test]
     labels_detected = row[ResultDataKey.labels_detected]
     tn, fp, fn, tp = confusion_matrix(labels, labels_detected, labels=[True, False]).ravel()
