@@ -13,8 +13,7 @@ from visualizer.heatmap_helper import heatmap, annotate_heatmap
 from visualizer.result_collector import get_result_data_as_data_frame
 from visualizer.result_data_keys import ResultDataKey
 from visualizer.result_metric_calculators import add_accuracy_to_df, add_subfolder_name_to_df, add_f1_score_to_df, \
-    add_detected_labels_to_df, add_precision_score_to_df
-
+    add_detected_labels_to_df, add_average_precision_score_to_df, add_precision_score_to_df, add_recall_score_to_df
 
 matplotlib.use("TkAgg")
 
@@ -41,19 +40,25 @@ def visualize_dataset(file_path, input_instances):
     plt.show()
 
 
-class ResultVisualizer:
+class AccuracyResultVisualizer:
 
     def __init__(self, accuracy_measure, anomaly_threshold):
         self.accuracy_measure = accuracy_measure
         self.result_data_frame = get_result_data_as_data_frame()
         self.result_data_frame.dropna()
         self.result_data_frame = add_detected_labels_to_df(self.result_data_frame, anomaly_threshold)
+
         if accuracy_measure == ResultDataKey.accuracy:
             self.result_data_frame = add_accuracy_to_df(self.result_data_frame)
-        if accuracy_measure == ResultDataKey.f1_score:
+        elif accuracy_measure == ResultDataKey.f1_score:
             self.result_data_frame = add_f1_score_to_df(self.result_data_frame)
-        if accuracy_measure == ResultDataKey.average_precision_score:
+        elif accuracy_measure == ResultDataKey.average_precision_score:
+            self.result_data_frame = add_average_precision_score_to_df(self.result_data_frame)
+        elif accuracy_measure == ResultDataKey.precision:
             self.result_data_frame = add_precision_score_to_df(self.result_data_frame)
+        elif accuracy_measure == ResultDataKey.recall:
+            self.result_data_frame = add_recall_score_to_df(self.result_data_frame)
+
         self.result_data_frame = add_subfolder_name_to_df(self.result_data_frame)
 
     def show_full_detailed_result_heat_map(self):
@@ -61,7 +66,7 @@ class ResultVisualizer:
                       (ResultDataKey.detector_name, ResultDataKey.file_path, self.accuracy_measure)]
         heat_map_df = heat_map_df.pivot(index=ResultDataKey.file_path, columns=ResultDataKey.detector_name)
         ax = sns.heatmap(heat_map_df, cmap='BuPu')
-        ax.set_title("Heatmap of each algorithm accuracy for each dataset")
+        ax.set_title("Heatmap of each algorithm" + self.accuracy_measure + " score for each dataset")
         plt.show()
 
     def show_result_overview_heat_map(self):
@@ -70,7 +75,8 @@ class ResultVisualizer:
         heat_map_df = heat_map_df.groupby([ResultDataKey.detector_name, ResultDataKey.dataset_name],
                                           as_index=False).mean()
         heat_map_df = heat_map_df.pivot(index=ResultDataKey.detector_name, columns=ResultDataKey.dataset_name)
-        im, cbar, ax = heatmap(heat_map_df, heat_map_df.index, heat_map_df.columns, cmap='BuPu', cbarlabel="Accuracy",
+        im, cbar, ax = heatmap(heat_map_df, heat_map_df.index, heat_map_df.columns, cmap='BuPu',
+                               cbarlabel=self.accuracy_measure,
                                picker=True)
         annotate_heatmap(im)
 
@@ -89,7 +95,7 @@ class ResultVisualizer:
                 self.__show_result_of_detector_against_dataset_sub_folders(detector_name, dataset_name)
 
         ax.figure.canvas.mpl_connect("pick_event", on_pick)
-        ax.set_title("Heatmap of each detector accuracy for each data repository")
+        ax.set_title("Heatmap of each detector" + self.accuracy_measure + " score for each data repository")
         plt.show()
 
     def __show_result_of_detector(self, detector_name):
@@ -119,9 +125,10 @@ class ResultVisualizer:
 
         figure.canvas.mpl_connect("pick_event", on_pick)
         ax = figure.axes[0]
-        title = "Accuracy of " + detector_name + " on " + dataset_name + " data repository subfolders"
+        title = self.accuracy_measure + " score of " + detector_name + " on " + dataset_name + "data repository " \
+                                                                                               "subfolders "
         ax.set_title(title)
-        ax.set_ylabel("Accuracy")
+        ax.set_ylabel(self.accuracy_measure)
         ax.set_xlabel("Dataset repository subfolders")
         plt.xticks(rotation=45)
         plt.show()
@@ -150,9 +157,11 @@ class ResultVisualizer:
 
         figure.canvas.mpl_connect("pick_event", on_pick)
         ax = figure.axes[0]
-        title = "Accuracy of " + detector_name + " on " + dataset_name + "  data repository subfolder " + subfolder
+        title = self.accuracy_measure + " score of " + detector_name + " on " + \
+                dataset_name + "data repository " \
+                               "subfolder " + subfolder
         ax.set_title(title)
-        ax.set_ylabel("Accuracy")
+        ax.set_ylabel(self.accuracy_measure)
         ax.set_xlabel("Dataset files")
         plt.xticks(rotation=90)
         plt.show()
