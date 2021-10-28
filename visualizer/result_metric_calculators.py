@@ -1,5 +1,7 @@
 import numpy as np
-from sklearn.metrics import accuracy_score, f1_score, average_precision_score, precision_score, recall_score
+from numpy import NaN
+from sklearn.metrics import accuracy_score, f1_score, average_precision_score, precision_score, recall_score, \
+    confusion_matrix
 
 from helper.ResultWindowLabeler import ResultWindowLabeler
 from visualizer.result_data_keys import ResultDataKey
@@ -9,6 +11,7 @@ def add_detected_labels_to_df(result_data_frame, anomaly_threshold, use_windows)
     """
     Adds accuracy column in data frame of results
     """
+    print("making window lables")
     result_data_frame[ResultDataKey.labels_detected] = result_data_frame.apply(
         lambda row: __calculate_detected_labels(row, anomaly_threshold, use_windows), axis=1)
     return result_data_frame
@@ -50,6 +53,11 @@ def add_f1_score_to_df(result_data_frame):
 def __calculate_f1_score(row):
     labels = row[ResultDataKey.labels_test]
     labels_detected = row[ResultDataKey.labels_detected]
+    tn, fp, fn, tp = confusion_matrix(labels, labels_detected, labels=[True, False]).ravel()
+    if tn == 0 & fp == 0 & fn == 0:
+        return 1.0
+    if (tp + fp) == 0 or (tp + fn) == 0:
+        return NaN
     return f1_score(labels, labels_detected, zero_division=1) * 100
 
 
@@ -83,6 +91,11 @@ def add_recall_score_to_df(result_data_frame):
 def __calculate_recall_score_labels(row):
     scores = row[ResultDataKey.labels_detected]
     labels = row[ResultDataKey.labels_test]
+    tn, fp, fn, tp = confusion_matrix(labels, scores, labels=[True, False]).ravel()
+    if tn == 0 & fp == 0 & fn == 0:
+        return 1.0
+    if (tp + fp) == 0 or (tp + fn) == 0:
+        return NaN
     precision = recall_score(labels, scores, zero_division=1) * 100
     return precision
 
@@ -100,6 +113,11 @@ def add_precision_score_to_df(result_data_frame):
 def __calculate_precision_score_labels(row):
     scores = row[ResultDataKey.labels_detected]
     labels = row[ResultDataKey.labels_test]
+    tn, fp, fn, tp = confusion_matrix(labels, scores, labels=[True, False]).ravel()
+    if tn == 0 & fp == 0 & fn == 0:
+        return 1.0
+    if (tp + fp) == 0 or (tp + fn) == 0:
+        return NaN
     precision = precision_score(labels, scores, zero_division=1) * 100
     return precision
 

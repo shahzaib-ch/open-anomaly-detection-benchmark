@@ -59,7 +59,7 @@ class AccuracyResultVisualizer:
             self.result_data_frame = add_precision_score_to_df(self.result_data_frame)
         elif accuracy_measure == ResultDataKey.recall:
             self.result_data_frame = add_recall_score_to_df(self.result_data_frame)
-
+        self.result_data_frame.dropna()
         self.result_data_frame = add_subfolder_name_to_df(self.result_data_frame)
 
     def show_full_detailed_result_heat_map(self):
@@ -67,7 +67,7 @@ class AccuracyResultVisualizer:
                       (ResultDataKey.detector_name, ResultDataKey.file_path, self.accuracy_measure)]
         heat_map_df = heat_map_df.pivot(index=ResultDataKey.file_path, columns=ResultDataKey.detector_name)
         ax = sns.heatmap(heat_map_df, cmap='BuPu')
-        ax.set_title("Heatmap of each algorithm" + self.accuracy_measure + " score for each dataset")
+        ax.set_title("Heatmap of each algorithm " + self.accuracy_measure.lower() + " score for each dataset")
         plt.show()
 
     def show_result_overview_heat_map(self):
@@ -96,7 +96,7 @@ class AccuracyResultVisualizer:
                 self.__show_result_of_detector_against_dataset_sub_folders(detector_name, dataset_name)
 
         ax.figure.canvas.mpl_connect("pick_event", on_pick)
-        ax.set_title("Heatmap of each detector" + self.accuracy_measure + " score for each data repository")
+        ax.set_title("Heatmap of each detector " + self.accuracy_measure.lower() + " score for each data repository")
         plt.show()
 
     def __show_result_of_detector(self, detector_name):
@@ -126,8 +126,9 @@ class AccuracyResultVisualizer:
 
         figure.canvas.mpl_connect("pick_event", on_pick)
         ax = figure.axes[0]
-        title = self.accuracy_measure + " score of " + detector_name + " on " + dataset_name + "data repository " \
-                                                                                               "subfolders "
+        title = self.accuracy_measure.lower() + " score of " + detector_name + " on " + dataset_name + "data " \
+                                                                                                       "repository " \
+                                                                                                       "subfolders "
         ax.set_title(title)
         ax.set_ylabel(self.accuracy_measure)
         ax.set_xlabel("Dataset repository subfolders")
