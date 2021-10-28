@@ -7,6 +7,7 @@ from matplotlib.image import AxesImage
 from matplotlib.patches import Rectangle
 from matplotlib.text import Text
 from pandas.plotting import parallel_coordinates
+from sklearn.metrics import precision_recall_curve
 
 from helper.common_methods import round_xy_coordinates
 from visualizer.heatmap_helper import heatmap, annotate_heatmap
@@ -288,8 +289,19 @@ class AccuracyResultVisualizer:
             parallel_coordinates(df, 'is_anomaly', colormap=plt.get_cmap("Set2"))
 
         ax = figure.axes[0]
-        title = file_path + " data with detector: " + detector_name
+        title = file_path + " data with algorithm: " + detector_name
         ax.set_title(title)
         ax.set_ylabel("values")
         plt.legend(loc='upper right')
+        plt.show()
+
+        figure = plt.figure(len(plt.get_fignums()) + 1)
+        # also show precision recall curve
+        precision, recall, thresholds = precision_recall_curve(labels_test, labels_detected)
+        plt.plot(recall, precision)
+        ax = figure.axes[0]
+        title = file_path + " data with algorithm: " + detector_name
+        ax.set_title(title)
+        ax.set_ylabel("Precision")
+        ax.set_xlabel("Recall")
         plt.show()
