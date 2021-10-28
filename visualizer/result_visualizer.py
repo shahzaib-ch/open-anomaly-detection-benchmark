@@ -61,7 +61,7 @@ class ResultVisualizer:
                       (ResultDataKey.detector_name, ResultDataKey.file_path, self.accuracy_measure)]
         heat_map_df = heat_map_df.pivot(index=ResultDataKey.file_path, columns=ResultDataKey.detector_name)
         ax = sns.heatmap(heat_map_df, cmap='BuPu')
-        ax.set_title("Heatmap of each detector accuracy for each dataset")
+        ax.set_title("Heatmap of each algorithm accuracy for each dataset")
         plt.show()
 
     def show_result_overview_heat_map(self):
