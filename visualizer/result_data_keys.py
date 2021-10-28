@@ -9,7 +9,7 @@ class ResultDataKey:
     dataset_name = "dataset_name"
     detector_name = "detector_name"
     file_path = "file_path"
-    accuracy = "accuracy"
+    accuracy = "Accuracy"
     subfolder = "subfolder"
     dataset_file_path = "dataset_file_path"
     training_time = "training_time"
