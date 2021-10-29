@@ -55,12 +55,12 @@ def __calculate_f1_score(row):
     print("........")
     labels = row[ResultDataKey.labels_test]
     labels_detected = row[ResultDataKey.labels_detected]
-    tn, fp, fn, tp = confusion_matrix(labels, labels_detected, labels=[True, False]).ravel()
+    tn, fp, fn, tp = confusion_matrix(labels, labels_detected,  labels=[0, 1]).ravel()
     if tn == 0 & fp == 0 & fn == 0:
-        return 1.0
+        return 100.0
     if (tp + fp) == 0 or (tp + fn) == 0:
         return NaN
-    return f1_score(labels, labels_detected, zero_division=1) * 100
+    return f1_score(labels, labels_detected, zero_division=1, labels=[0, 1]) * 100
 
 
 def add_average_precision_score_to_df(result_data_frame):
@@ -74,6 +74,7 @@ def add_average_precision_score_to_df(result_data_frame):
 
 
 def __calculate_average_precision_score_labels(row):
+    print("........")
     scores = row[ResultDataKey.labels_detected]
     labels = row[ResultDataKey.labels_test]
     precision = average_precision_score(labels, scores) * 100
@@ -91,14 +92,15 @@ def add_recall_score_to_df(result_data_frame):
 
 
 def __calculate_recall_score_labels(row):
+    print("........")
     scores = row[ResultDataKey.labels_detected]
     labels = row[ResultDataKey.labels_test]
-    tn, fp, fn, tp = confusion_matrix(labels, scores, labels=[True, False]).ravel()
+    tn, fp, fn, tp = confusion_matrix(labels, scores,  labels=[0, 1]).ravel()
     if tn == 0 & fp == 0 & fn == 0:
-        return 1.0
+        return 100.0
     if (tp + fp) == 0 or (tp + fn) == 0:
         return NaN
-    precision = recall_score(labels, scores, zero_division=1) * 100
+    precision = recall_score(labels, scores, zero_division=1, labels=[0, 1]) * 100
     return precision
 
 
@@ -113,14 +115,15 @@ def add_precision_score_to_df(result_data_frame):
 
 
 def __calculate_precision_score_labels(row):
+    print("........")
     scores = row[ResultDataKey.labels_detected]
     labels = row[ResultDataKey.labels_test]
-    tn, fp, fn, tp = confusion_matrix(labels, scores, labels=[True, False]).ravel()
+    tn, fp, fn, tp = confusion_matrix(labels, scores, labels=[0, 1]).ravel()
     if tn == 0 & fp == 0 & fn == 0:
-        return 1.0
+        return 100.0
     if (tp + fp) == 0 or (tp + fn) == 0:
         return NaN
-    precision = precision_score(labels, scores, zero_division=1) * 100
+    precision = precision_score(labels, scores, zero_division=1, labels=[0, 1]) * 100
     return precision
 
 

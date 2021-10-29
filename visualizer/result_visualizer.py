@@ -47,7 +47,7 @@ class AccuracyResultVisualizer:
         self.accuracy_measure = accuracy_measure
         print("Creating data frame...")
         self.result_data_frame = get_result_data_as_data_frame()
-        self.result_data_frame.dropna()
+        self.result_data_frame = self.result_data_frame.dropna()
         print("Adding detected labels...")
         self.result_data_frame = add_detected_labels_to_df(self.result_data_frame, anomaly_threshold, use_windows)
         print("Done adding labels")
@@ -63,13 +63,15 @@ class AccuracyResultVisualizer:
             self.result_data_frame = add_precision_score_to_df(self.result_data_frame)
         elif accuracy_measure == ResultDataKey.recall:
             self.result_data_frame = add_recall_score_to_df(self.result_data_frame)
-        self.result_data_frame.dropna()
+        self.result_data_frame = self.result_data_frame.dropna()
         print("Getting sub folder names...")
         self.result_data_frame = add_subfolder_name_to_df(self.result_data_frame)
 
     def show_full_detailed_result_heat_map(self):
         heat_map_df = self.result_data_frame.loc[:,
                       (ResultDataKey.detector_name, ResultDataKey.file_path, self.accuracy_measure)]
+        heat_map_df.to_csv("calculated_result.csv")
+
         heat_map_df = heat_map_df.pivot(index=ResultDataKey.file_path, columns=ResultDataKey.detector_name)
         ax = sns.heatmap(heat_map_df, cmap='BuPu')
         ax.set_title("Heatmap of each algorithm " + self.accuracy_measure.lower() + " score for each dataset")
@@ -78,6 +80,7 @@ class AccuracyResultVisualizer:
     def show_result_overview_heat_map(self):
         heat_map_df = self.result_data_frame.loc[:,
                       (ResultDataKey.detector_name, ResultDataKey.dataset_name, self.accuracy_measure)]
+        heat_map_df.to_csv("calculated_result.csv")
         heat_map_df = heat_map_df.groupby([ResultDataKey.detector_name, ResultDataKey.dataset_name],
                                           as_index=False).mean()
         heat_map_df = heat_map_df.pivot(index=ResultDataKey.detector_name, columns=ResultDataKey.dataset_name)
