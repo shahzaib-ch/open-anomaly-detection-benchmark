@@ -113,8 +113,8 @@ class AccuracyResultVisualizer:
 
     def __show_result_of_detector_against_dataset_sub_folders(self, detector_name, dataset_name):
         result_data_frame = self.result_data_frame
-        bar_df = result_data_frame[
-            (result_data_frame.detector_name == detector_name) & (result_data_frame.dataset_name == dataset_name)]
+        bar_df = result_data_frame[np.logical_and((result_data_frame[ResultDataKey.detector_name] == detector_name),
+                                                  result_data_frame[ResultDataKey.dataset_name] == dataset_name)]
         bar_df = bar_df.loc[:, (ResultDataKey.subfolder, self.accuracy_measure)]
         bar_df = bar_df.groupby([ResultDataKey.subfolder],
                                 as_index=False).mean()
@@ -146,9 +146,9 @@ class AccuracyResultVisualizer:
 
     def __show_result_of_detector_against_dataset_single_sub_folder(self, detector_name, dataset_name, subfolder):
         result_data_frame = self.result_data_frame
-        bar_df = result_data_frame[
-            (result_data_frame.detector_name == detector_name) & (
-                    result_data_frame.dataset_name == dataset_name) & (result_data_frame.subfolder == subfolder)]
+        bar_df = result_data_frame[np.logical_and((result_data_frame[ResultDataKey.detector_name] == detector_name),
+                                                  result_data_frame[ResultDataKey.dataset_name] == dataset_name)]
+        bar_df = bar_df[bar_df[ResultDataKey.subfolder] == subfolder]
 
         bar_df = bar_df.loc[:, (ResultDataKey.file_path, self.accuracy_measure)]
 
@@ -181,17 +181,18 @@ class AccuracyResultVisualizer:
 
     def __get_result_of_detector_against_single_dataset_file(self, detector_name, dataset_name, file_path):
         result_data_frame = self.result_data_frame
+
         dataset_file_df = result_data_frame[
-            (result_data_frame.detector_name == detector_name) & (
-                    result_data_frame.dataset_name == dataset_name) & (
-                    result_data_frame.file_path == file_path)]
+            np.logical_and((result_data_frame[ResultDataKey.detector_name] == detector_name),
+                           result_data_frame[ResultDataKey.dataset_name] == dataset_name)]
+        dataset_file_df = dataset_file_df[dataset_file_df[ResultDataKey.file_path] == file_path]
         return dataset_file_df
 
     """
     def show_result_of_detector_against_dataset(self, detector_name, dataset_name):
         heat_map_df = add_accuracy_to_df(self.result_data_frame)
         heat_map_df = heat_map_df[
-            (heat_map_df.detector_name == detector_name) & (heat_map_df.dataset_name == dataset_name)]
+            (heat_map_df.detector_name == detector_name) and (heat_map_df.dataset_name == dataset_name)]
         heat_map_df = heat_map_df.loc[:, (ResultDataKey.file_path, self.accuracy_measure)]
         file_paths = heat_map_df[ResultDataKey.file_path].to_numpy()
         accuracy = heat_map_df[self.accuracy_measure].to_numpy()
@@ -259,7 +260,7 @@ class AccuracyResultVisualizer:
         for element in dataset_length:
             is_detected = labels_detected_joined[element] == 1
             is_labeled = labels_test_joined[element] == 1
-            if element < len(input_instances_train) & is_labeled:
+            if element < len(input_instances_train) and is_labeled:
                 color = 'r'
                 x_labelled.append(element)
                 y_labelled.append(input_instances[element])
@@ -268,7 +269,7 @@ class AccuracyResultVisualizer:
                 continue
 
             color = 'b'
-            if is_detected & is_labeled:
+            if is_detected and is_labeled:
                 color = 'g'
                 x_detected_and_labelled.append(element)
                 y_detected_and_labelled.append(input_instances[element])
@@ -294,6 +295,7 @@ class AccuracyResultVisualizer:
             plt.plot(x_detected, y_detected, detected_color, label="Anomalies detected by algorithm")
             plt.plot(x_detected_and_labelled, y_detected_and_labelled, detected_and_labelled_color,
                      label="Actual anomalies detected by algorithm")
+            plt.axvline(x=len(labels_train), color="yellow", label="Train and test data split")
         else:
             # plt.scatter(dataset_length, input_instances, c=colors)
             df = pd.DataFrame(input_instances)

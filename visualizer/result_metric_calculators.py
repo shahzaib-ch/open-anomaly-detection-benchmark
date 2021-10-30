@@ -56,7 +56,7 @@ def __calculate_f1_score(row):
     labels = row[ResultDataKey.labels_test]
     labels_detected = row[ResultDataKey.labels_detected]
     tn, fp, fn, tp = confusion_matrix(labels, labels_detected,  labels=[0, 1]).ravel()
-    if tn == 0 & fp == 0 & fn == 0:
+    if tn == 0 and fp == 0 and fn == 0:
         return 100.0
     if (tp + fp) == 0 or (tp + fn) == 0:
         return NaN
@@ -96,7 +96,7 @@ def __calculate_recall_score_labels(row):
     scores = row[ResultDataKey.labels_detected]
     labels = row[ResultDataKey.labels_test]
     tn, fp, fn, tp = confusion_matrix(labels, scores,  labels=[0, 1]).ravel()
-    if tn == 0 & fp == 0 & fn == 0:
+    if tn == 0 and fp == 0 and fn == 0:
         return 100.0
     if (tp + fp) == 0 or (tp + fn) == 0:
         return NaN
@@ -119,7 +119,7 @@ def __calculate_precision_score_labels(row):
     scores = row[ResultDataKey.labels_detected]
     labels = row[ResultDataKey.labels_test]
     tn, fp, fn, tp = confusion_matrix(labels, scores, labels=[0, 1]).ravel()
-    if tn == 0 & fp == 0 & fn == 0:
+    if tn == 0 and fp == 0 and fn == 0:
         return 100.0
     if (tp + fp) == 0 or (tp + fn) == 0:
         return NaN
