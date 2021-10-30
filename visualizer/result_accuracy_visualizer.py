@@ -211,6 +211,7 @@ class AccuracyResultVisualizer:
         labels_train = data[ResultDataKey.labels_train].values[0]
         labels_test = data[ResultDataKey.labels_test].values[0]
         labels_detected = data[ResultDataKey.labels_detected].values[0]
+        anomaly_scores_by_algorithm = data[ResultDataKey.anomaly_scores_by_algorithm].values[0]
         subfolder = data[ResultDataKey.subfolder].values[0]
         input_instances = np.concatenate((input_instances_train, input_instances_test))
         labels = np.concatenate((labels_train, labels_test))
@@ -223,7 +224,8 @@ class AccuracyResultVisualizer:
 
         def visualize_dataset_with_anomalies():
             self.visualize_dataset_with_anomalies(file_path, detector_name, input_instances_train,
-                                                  input_instances_test, labels_train, labels_test, labels_detected)
+                                                  input_instances_test, labels_train, labels_test, labels_detected,
+                                                  anomaly_scores_by_algorithm)
 
         visualize_dataset_with_anomalies()
         """
@@ -237,7 +239,8 @@ class AccuracyResultVisualizer:
         """
 
     def visualize_dataset_with_anomalies(self, file_path, detector_name, input_instances_train,
-                                         input_instances_test, labels_train, labels_test, labels_detected):
+                                         input_instances_test, labels_train, labels_test, labels_detected,
+                                         anomaly_scores_by_algorithm):
         input_instances = np.concatenate((input_instances_train, input_instances_test))
         labels_detected_joined = np.concatenate((labels_train, labels_detected))
         labels_test_joined = np.concatenate((labels_train, labels_test))
@@ -311,7 +314,7 @@ class AccuracyResultVisualizer:
 
         figure = plt.figure(len(plt.get_fignums()) + 1)
         # also show precision recall curve
-        precision, recall, thresholds = precision_recall_curve(labels_test, labels_detected)
+        precision, recall, thresholds = precision_recall_curve(labels_test, anomaly_scores_by_algorithm)
         plt.plot(recall, precision)
         ax = figure.axes[0]
         title = file_path + " data with algorithm: " + detector_name

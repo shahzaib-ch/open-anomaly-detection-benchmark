@@ -1,12 +1,7 @@
 import pandas as pd
 from sklearn.metrics import confusion_matrix
 
-labels = [0, 1, 0, 1, 1, 0, 0, 0]
-scores = [0, 0, 0, 1, 1, 0, 1, 0]
+from helper.labels_helper import unpickle_result
 
-for el in labels:
-    if el == 0:
-        continue
-
-    print(el)
-
+labels = "/Users/shahzaib/PycharmProjects/benchmark/result/One-class SVM/yahoo/A2Benchmark/synthetic_56"
+unpickle_result(labels, "totot")
