@@ -121,6 +121,7 @@ class AccuracyResultVisualizer:
         subfolders = bar_df[ResultDataKey.subfolder].to_numpy()
         accuracy = bar_df[self.accuracy_measure].to_numpy()
 
+        accuracy = np.where(accuracy == 0, -5, accuracy)
         figure = plt.figure(len(plt.get_fignums()) + 1)
         plt.bar(subfolders, accuracy, picker=True)
 
@@ -134,7 +135,7 @@ class AccuracyResultVisualizer:
 
         figure.canvas.mpl_connect("pick_event", on_pick)
         ax = figure.axes[0]
-        title = self.accuracy_measure.lower() + " score of " + detector_name + " on " + dataset_name + "data " \
+        title = self.accuracy_measure.lower() + " score of " + detector_name + " on " + dataset_name + " data " \
                                                                                                        "repository " \
                                                                                                        "subfolders "
         ax.set_title(title)
@@ -153,6 +154,8 @@ class AccuracyResultVisualizer:
 
         file_paths = bar_df[ResultDataKey.file_path].to_numpy()
         accuracy = bar_df[self.accuracy_measure].to_numpy()
+        accuracy = np.where(accuracy == 0, -5, accuracy)
+
         figure = plt.figure(len(plt.get_fignums()) + 1)
         plt.bar(file_paths, accuracy, picker=True)
 
@@ -168,7 +171,7 @@ class AccuracyResultVisualizer:
         figure.canvas.mpl_connect("pick_event", on_pick)
         ax = figure.axes[0]
         title = self.accuracy_measure + " score of " + detector_name + " on " + \
-                dataset_name + "data repository " \
+                dataset_name + " data repository " \
                                "subfolder " + subfolder
         ax.set_title(title)
         ax.set_ylabel(self.accuracy_measure)
