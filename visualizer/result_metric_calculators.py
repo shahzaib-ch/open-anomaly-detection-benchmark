@@ -98,7 +98,7 @@ def __calculate_recall_score_labels(row):
     tn, fp, fn, tp = confusion_matrix(labels, scores,  labels=[0, 1]).ravel()
     if tn == 0 and fp == 0 and fn == 0:
         return 100.0
-    if (tp + fp) == 0 or (tp + fn) == 0:
+    if (tp + fn) == 0:
         return NaN
     precision = recall_score(labels, scores, zero_division=1, labels=[0, 1]) * 100
     return precision
@@ -121,7 +121,7 @@ def __calculate_precision_score_labels(row):
     tn, fp, fn, tp = confusion_matrix(labels, scores, labels=[0, 1]).ravel()
     if tn == 0 and fp == 0 and fn == 0:
         return 100.0
-    if (tp + fp) == 0 or (tp + fn) == 0:
+    if (tp + fp) == 0:
         return NaN
     precision = precision_score(labels, scores, zero_division=1, labels=[0, 1]) * 100
     return precision
