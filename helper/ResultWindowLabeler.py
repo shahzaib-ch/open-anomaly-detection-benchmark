@@ -57,7 +57,8 @@ class ResultWindowLabeler:
     def find_back_consecutive_ones_count(self, index, anomalies_actual_and_detected):
         count = 0
         index = index - 1
-        while index < (len(anomalies_actual_and_detected) - index):
+        while_end = len(anomalies_actual_and_detected) - index
+        while index < while_end:
             if anomalies_actual_and_detected[index] != 1:
                 break
             count = count + 1
