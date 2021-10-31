@@ -18,3 +18,7 @@ class ResultDataKey:
     average_precision_score = "Average precision"
     precision = "Precision"
     recall = "Recall"
+    total_time = "Total time"
+    train_data_instances = "Train data instances"
+    test_data_instances = "Test data instances"
+    total_data_instances = "Total data instances"
