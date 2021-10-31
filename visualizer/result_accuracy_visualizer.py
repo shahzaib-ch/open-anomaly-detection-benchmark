@@ -322,3 +322,8 @@ class AccuracyResultVisualizer:
         ax.set_ylabel("Precision")
         ax.set_xlabel("Recall")
         plt.show()
+
+        figure = plt.figure(len(plt.get_fignums()) + 1)
+        plt.plot(anomaly_scores_by_algorithm)
+        ax = figure.axes[0]
+        plt.show()
