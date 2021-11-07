@@ -123,10 +123,10 @@ def visualize_4_datasets():
 
     fig, ax = plt.subplots(4)
 
-    add_annotation(ax[0], '(a) ODDS multidimensional dataset')
-    add_annotation(ax[1], '(b) NAB dataset')
-    add_annotation(ax[2], '(c) UCR dataset')
-    add_annotation(ax[3], '(d) Yahoo dataset')
+    add_annotation(ax[0], '(a) Example of ODD multivariate dataset')
+    add_annotation(ax[1], '(b) Example of NAB dataset')
+    add_annotation(ax[2], '(c) Example of UCR dataset')
+    add_annotation(ax[3], '(d) Example of Yahoo dataset')
 
     ax[0].plot(d1.to_numpy())
     ax[1].plot(d2.to_numpy())
@@ -151,4 +151,4 @@ def visualize_multi_dimensional_file():
 # visualize_multi_dimensional_file()
 
 
-visualize_overview()
+visualize_4_datasets()
