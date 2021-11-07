@@ -14,16 +14,19 @@ def visualize_overview():
     avg_instance = []
     datasets_count = []
 
+    odd_files = []
     odd_features = []
 
     for folder in labels:
         path = base_path + folder
-        number_of_datasets, avg_instances_per_file, features = data_from_one_data_folder(path)
+        number_of_datasets, avg_instances_per_file, features, odd_files_list = data_from_one_data_folder(path)
+
         avg_instance.append(avg_instances_per_file)
         datasets_count.append(number_of_datasets)
 
         if folder == "odd":
             odd_features = features
+            odd_files = odd_files_list
 
     x = np.arange(len(labels))  # the label locations
     width = 0.5  # the width of the bars
@@ -36,8 +39,10 @@ def visualize_overview():
     ax[0].bar_label(ax[0].containers[0], padding=5)
     ax[0].spines['top'].set_visible(False)
     ax[0].spines['right'].set_visible(False)
+    ax[0].set_ylabel("No. of dataset files")
+    ax[0].set_xlabel("Data folders in OADB")
 
-    add_annotation(ax[0], '(a) Number of datasets per folder')
+    add_annotation_left(ax[0], '(a)')
 
     ax[1].bar(x, avg_instance, width)
 
@@ -46,14 +51,20 @@ def visualize_overview():
     ax[1].bar_label(ax[1].containers[0], padding=5)
     ax[1].spines['top'].set_visible(False)
     ax[1].spines['right'].set_visible(False)
-    add_annotation(ax[1], '(b) Average number of data instances per dataset')
+    ax[1].set_ylabel("Avg. no. of data instances")
+    ax[1].set_xlabel("Data folders in OADB")
+    add_annotation_left(ax[1], '(b)')
 
-    ax[2].bar(np.arange(len(odd_features)), odd_features)
+    ax[2].bar(odd_files, odd_features)
 
-    ax[2].tick_params(bottom=False, labelbottom=False)
+    # ax[2].tick_params(bottom=False, labelbottom=False)
     ax[2].spines['top'].set_visible(False)
     ax[2].spines['right'].set_visible(False)
-    add_annotation(ax[2], '(c) Features of datasets in odd folder')
+    ax[2].set_ylabel("Avg. no. of features")
+    ax[2].set_xlabel("ODD dataset files  in OADB")
+    ax[2].set_xticklabels(odd_files, rotation=45)
+    # ax[2].set_xlabel("Dataset file names")
+    add_annotation_left(ax[2], '(c)')
 
     fig.tight_layout()
 
@@ -61,6 +72,7 @@ def visualize_overview():
 
 
 def data_from_one_data_folder(path):
+    odd_files = []
     datasets = Path(path).rglob('*.csv')
     number_of_datasets = 0
     features = []
@@ -68,17 +80,29 @@ def data_from_one_data_folder(path):
     for dataset in datasets:
         number_of_datasets = number_of_datasets + 1
         df = pd.read_csv(str(dataset))
+        path = str(dataset).split("/")
+        path.reverse()
+        file_name = path[0].replace(".csv", "")
+        odd_files.append(file_name)
         instances_count = df.size
         features.append(df.columns.size - 2)
         instances_in_datasets.append(instances_count)
 
     avg_instances_per_file = int(np.average(instances_in_datasets))
 
-    return number_of_datasets, avg_instances_per_file, features
+    return number_of_datasets, avg_instances_per_file, features, odd_files
 
 
 def add_annotation(ax, text):
     ax.set_xlabel(text, labelpad=10)
+
+
+def add_annotation_left(ax, text):
+    title = ax.set_title(text, y=-0.3, pad=-60)
+    ylabel = ax.yaxis.get_label()
+    offset = np.array([-0.08, 0.0])
+    title.set_position(ylabel.get_position() + offset)
+    title.set_rotation(90)
 
 
 def visualize_4_datasets():
@@ -127,4 +151,4 @@ def visualize_multi_dimensional_file():
 # visualize_multi_dimensional_file()
 
 
-visualize_4_datasets()
+visualize_overview()

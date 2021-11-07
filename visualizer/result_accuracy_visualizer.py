@@ -314,16 +314,19 @@ class AccuracyResultVisualizer:
 
         figure = plt.figure(len(plt.get_fignums()) + 1)
         # also show precision recall curve
-        precision, recall, thresholds = precision_recall_curve(labels_test, anomaly_scores_by_algorithm)
-        plt.plot(recall, precision)
+        precision, recall, thresholds = precision_recall_curve(labels_test, anomaly_scores_by_algorithm, pos_label=1)
+        plt.plot(recall, label="Recall")
+        plt.plot(precision, label="Precision")
+        plt.plot(thresholds, label="Thresholds")
         ax = figure.axes[0]
         title = file_path + " data with algorithm: " + detector_name
         ax.set_title(title)
-        ax.set_ylabel("Precision")
-        ax.set_xlabel("Recall")
+        # ax.set_ylabel("Precision")
+        # ax.set_xlabel("Recall")
+        plt.legend(loc="upper right")
         plt.show()
 
-        figure = plt.figure(len(plt.get_fignums()) + 1)
-        plt.plot(anomaly_scores_by_algorithm)
-        ax = figure.axes[0]
-        plt.show()
+        # figure = plt.figure(len(plt.get_fignums()) + 1)
+        # plt.plot(anomaly_scores_by_algorithm)
+        # ax = figure.axes[0]
+        # plt.show()
