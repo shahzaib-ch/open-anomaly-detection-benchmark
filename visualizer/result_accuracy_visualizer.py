@@ -84,6 +84,20 @@ class AccuracyResultVisualizer:
         heat_map_df = heat_map_df.groupby([ResultDataKey.detector_name, ResultDataKey.dataset_name],
                                           as_index=False).mean()
         heat_map_df = heat_map_df.pivot(index=ResultDataKey.detector_name, columns=ResultDataKey.dataset_name)
+        new_columns = []
+        for column in heat_map_df.columns.levels[1].values:
+            if column == "yahoo":
+                column = column.capitalize()
+            else:
+                column = column.upper()
+            new_name = column + " datasets"
+            new_columns.append(new_name)
+
+        heat_map_df.columns = new_columns
+
+        heat_map_df["mean"] = heat_map_df.mean(axis=1).to_numpy()
+        heat_map_df = heat_map_df.sort_values(by="mean", ascending=False, na_position="last")
+        heat_map_df.pop("mean")
         im, cbar, ax = heatmap(heat_map_df, heat_map_df.index, heat_map_df.columns, cmap='BuPu',
                                cbarlabel=self.accuracy_measure,
                                picker=True)
