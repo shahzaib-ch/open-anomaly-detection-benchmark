@@ -55,7 +55,7 @@ def __calculate_f1_score(row):
     print("........")
     labels = row[ResultDataKey.labels_test]
     labels_detected = row[ResultDataKey.labels_detected]
-    tn, fp, fn, tp = confusion_matrix(labels, labels_detected,  labels=[0, 1]).ravel()
+    tn, fp, fn, tp = confusion_matrix(labels, labels_detected, labels=[0, 1]).ravel()
     if tn == 0 and fp == 0 and fn == 0:
         return 100.0
     if (tp + fp) == 0 or (tp + fn) == 0:
@@ -75,9 +75,12 @@ def add_average_precision_score_to_df(result_data_frame):
 
 def __calculate_average_precision_score_labels(row):
     print("........")
-    scores = row[ResultDataKey.labels_detected]
+    scores = row[ResultDataKey.anomaly_scores_by_algorithm]
     labels = row[ResultDataKey.labels_test]
-    precision = average_precision_score(labels, scores) * 100
+    try:
+        precision = average_precision_score(labels, scores) * 100
+    except:
+        precision = NaN
     return precision
 
 
@@ -95,7 +98,7 @@ def __calculate_recall_score_labels(row):
     print("........")
     scores = row[ResultDataKey.labels_detected]
     labels = row[ResultDataKey.labels_test]
-    tn, fp, fn, tp = confusion_matrix(labels, scores,  labels=[0, 1]).ravel()
+    tn, fp, fn, tp = confusion_matrix(labels, scores, labels=[0, 1]).ravel()
     if tn == 0 and fp == 0 and fn == 0:
         return 100.0
     if (tp + fn) == 0:
