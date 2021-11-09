@@ -113,7 +113,7 @@ class AccuracyResultVisualizer:
             if isinstance(event.artist, AxesImage):
                 dataset_index, detector_index = round_xy_coordinates(event.mouseevent.xdata, event.mouseevent.ydata)
                 detector_name = heat_map_df.index.array[detector_index]
-                dataset_name = heat_map_df.columns[dataset_index][1]
+                dataset_name = heat_map_df.columns[dataset_index].split(" ")[0].lower()
                 print("Selected detector: ", detector_name, "---", "Selected dataset: ", dataset_name)
                 self.__show_result_of_detector_against_dataset_sub_folders(detector_name, dataset_name)
 
