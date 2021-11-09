@@ -1,3 +1,4 @@
+import math
 import matplotlib
 import numpy as np
 import pandas as pd
@@ -6,6 +7,7 @@ from matplotlib import pyplot as plt
 from matplotlib.image import AxesImage
 from matplotlib.patches import Rectangle
 from matplotlib.text import Text
+from numpy import NaN
 from pandas.plotting import parallel_coordinates
 from sklearn.metrics import precision_recall_curve
 
@@ -98,6 +100,9 @@ class AccuracyResultVisualizer:
         heat_map_df["mean"] = heat_map_df.mean(axis=1).to_numpy()
         heat_map_df = heat_map_df.sort_values(by="mean", ascending=False, na_position="last")
         heat_map_df.pop("mean")
+        heat_map_df = heat_map_df.round(decimals=1)
+        trunc = lambda x: (np.trunc(10 * x) / 10, NaN)[x == NaN]
+        heat_map_df = heat_map_df.applymap(trunc)
         im, cbar, ax = heatmap(heat_map_df, heat_map_df.index, heat_map_df.columns, cmap='BuPu',
                                cbarlabel=self.accuracy_measure,
                                picker=True)

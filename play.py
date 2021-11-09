@@ -1,4 +1,6 @@
+import numpy as np
+from numpy import NaN
+
 from visualizer.result_time_complexity_visualizer import TimeComplexityResultVisualizer
 
-l = TimeComplexityResultVisualizer()
-l.show_multivariate_training()
+print(np.trunc(10 * 12.190) / 10)
