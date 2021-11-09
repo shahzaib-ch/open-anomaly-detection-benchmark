@@ -10,6 +10,36 @@ class TimeComplexityResultVisualizer:
     def __init__(self):
         self.result_df = get_result_data_as_data_frame()
 
+    def show_multivariate_test(self):
+        df = self.result_df[self.result_df[ResultDataKey.dataset_name] == "odd"]
+
+        df = df.loc[:, (ResultDataKey.detector_name, ResultDataKey.test_data_instances, ResultDataKey.test_time)]
+        data_dict = {}
+        group_by = df.groupby([ResultDataKey.detector_name],
+                              as_index=False)
+        for group in group_by.groups:
+            group_df = group_by.get_group(group)
+            data_dict[group] = {
+                ResultDataKey.test_time: group_df[ResultDataKey.test_time].sort_values().to_numpy(),
+                ResultDataKey.test_data_instances: group_df[
+                    ResultDataKey.test_data_instances].sort_values().to_numpy(),
+            }
+
+        figure = plt.figure(len(plt.get_fignums()) + 1)
+        for detector, data in data_dict.items():
+            test_time = data[ResultDataKey.test_time]
+            test_data_instances = data[ResultDataKey.test_data_instances]
+            plt.plot(test_data_instances, test_time, label=detector)
+
+        ax = figure.axes[0]
+        ax.set_xlabel("Dataset size (number of data instances)")
+        ax.set_ylabel("Time (seconds)")
+        plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+        plt.yscale("log")
+        plt.xscale("log")
+        plt.tight_layout()
+        plt.show()
+
     def show_multivariate_training(self):
         df = self.result_df[self.result_df[ResultDataKey.dataset_name] == "odd"]
 
@@ -35,6 +65,8 @@ class TimeComplexityResultVisualizer:
         ax.set_xlabel("Dataset size (number of data instances)")
         ax.set_ylabel("Time (seconds)")
         plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+        plt.yscale("log")
+        plt.xscale("log")
         plt.tight_layout()
         plt.show()
 
@@ -92,6 +124,8 @@ class TimeComplexityResultVisualizer:
         ax.set_xlabel("Dataset size (number of data instances)")
         ax.set_ylabel("Time (seconds)")
         plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+        plt.yscale("log")
+        plt.xscale("log")
         plt.tight_layout()
         plt.show()
 
@@ -121,6 +155,8 @@ class TimeComplexityResultVisualizer:
         ax.set_xlabel("Dataset size (number of data instances)")
         ax.set_ylabel("Time (seconds)")
         plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+        plt.yscale("log")
+        plt.xscale("log")
         plt.tight_layout()
         plt.show()
 

@@ -3,4 +3,5 @@ from numpy import NaN
 
 from visualizer.result_time_complexity_visualizer import TimeComplexityResultVisualizer
 
-print(np.trunc(10 * 12.190) / 10)
+tcrv = TimeComplexityResultVisualizer()
+tcrv.show_univariate_total()
