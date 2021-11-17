@@ -1,14 +1,11 @@
 from abc import ABC, abstractmethod
 
-from sklearn.cluster import KMeans
-from sklearn.covariance import EllipticEnvelope
-
 
 class BaseDetector(ABC):
     model = None
 
     @abstractmethod
-    def createInstance(self):
+    def createInstance(self, features_count, contamination):
         """
         Creates mode and assigned to model variable
         """
