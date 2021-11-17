@@ -4,8 +4,9 @@ from sklearn.model_selection import train_test_split
 
 class PreProcessor:
 
-    def __init__(self, file_path):
+    def __init__(self, file_path, train_size):
         self.file_path = file_path
+        self.train_size = train_size
 
     def __get_data_from_file(self):
         """
@@ -23,7 +24,11 @@ class PreProcessor:
     def get_input_instances_and_labels_split(self):
         input_instances, labels = self.__get_data_from_file()
         input_instances_train, input_instances_test, labels_train, labels_test = \
-            train_test_split(input_instances, labels, train_size=0.5, shuffle=False)
+            train_test_split(input_instances, labels, train_size=self.train_size, shuffle=False)
+        input_instances_train = input_instances_train.to_numpy()
+        input_instances_test = input_instances_test.to_numpy()
+        labels_train = labels_train.to_numpy()
+        labels_test = labels_test.to_numpy()
         return input_instances_train, input_instances_test, labels_train, labels_test
 
     def __clean_data(self, df):
