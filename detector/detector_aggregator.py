@@ -16,20 +16,20 @@ from detector.relative_entropy import RelativeEntropyDetector
 from detector.windowed_gaussian import WindowedGaussianDetector
 
 ALGORITHMS_DICTIONARY = {
-    # "Elliptic Envelope": EllipticEnvelopeDetector(),
-    # "Isolation Forest": IsolationForestDetector(),
-    # "Local Outlier Factor": LocalOutlierFactorDetector(),
-    # "Windowed Gaussian": WindowedGaussianDetector(),
-    # "Relative Entropy": RelativeEntropyDetector(),
+    "Elliptic Envelope": EllipticEnvelopeDetector(),
+    "Isolation Forest": IsolationForestDetector(),
+    "Local Outlier Factor": LocalOutlierFactorDetector(),
+    "Windowed Gaussian": WindowedGaussianDetector(),
+    "Relative Entropy": RelativeEntropyDetector(),
     "One-class SVM": OneClassSupportVectorMachineDetector(),
-    # "Angle-based Outlier Detector": AngleBasedOutlierDetector(),
-    # "kNN": KNearestNeighborsDetector(),
-    # "Clustering Based Local Outlier Factor": ClusteringBasedLocalOutlierFactorDetector(),
-    # "Auto Encoder": AutoEncoderDetector(),
-    # "KNN CAD": KnncadDetector(),
-    # "Expose": ExposeDetector(),
-    # "Contextual Anomaly Detector": ContextualAnomalyDetector(),
-    # "Bayes Change Point": BayesChangePointDetector(),
+    "Angle-based Outlier Detector": AngleBasedOutlierDetector(),
+    "kNN": KNearestNeighborsDetector(),
+    "Clustering Based Local Outlier Factor": ClusteringBasedLocalOutlierFactorDetector(),
+    "Auto Encoder": AutoEncoderDetector(),
+    "KNN CAD": KnncadDetector(),
+    "Expose": ExposeDetector(),
+    "Contextual Anomaly Detector": ContextualAnomalyDetector(),
+    "Bayes Change Point": BayesChangePointDetector(),
 }
 
 """
