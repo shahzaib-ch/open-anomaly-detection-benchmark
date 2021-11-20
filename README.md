@@ -12,3 +12,6 @@
 ## How to add new dataset
 * Make a CSV file according to format described in [README.md](https://github.com/shahzaib-ch/open-anomaly-detection-benchmark/blob/main/data/README.md) file.
 * Add this dataset file by creating a new folder in [datasets](https://github.com/shahzaib-ch/open-anomaly-detection-benchmark/tree/main/data/datasets) folder and adding file in newly created folder.
+
+
+Note: Use PyCharm IDE to run and edit benchmark.
