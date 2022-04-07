@@ -15,3 +15,6 @@
 
 
 Note: Use PyCharm IDE to run and edit benchmark.
+
+
+Master thesis based on this benchmark [Open Anomaly Detection Benchmark (OADB): A benchmark for evaluation of anomaly detection algorithms](http://urn.nb.no/URN:NBN:no-94669)
